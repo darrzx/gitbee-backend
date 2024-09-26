@@ -1,8 +1,8 @@
 import axios from "axios";
 import dotenv from "dotenv";
 import z from "zod";
-import { APIResponse, defaultResponse } from "@/models/generic/response";
-import { getErrors } from "@/utils/response/response";
+import { APIResponse, defaultResponse } from "../../models/generic/response";
+import { getErrors } from "../../utils/response/response";
 
 dotenv.config();
 

@@ -1,6 +1,6 @@
 import type { RequestHandler, Request, Response, NextFunction } from "express";
-import SemesterService from "@/services/semester/semesterService";
-import { sendErrorResponse, sendSuccessResponse } from "@/utils/response/response";
+import SemesterService from "../../services/semester/semesterService";
+import { sendErrorResponse, sendSuccessResponse } from "../../utils/response/response";
 
 export default class SemesterHandler {
     static async getAllSemester(req : Request, res : Response, next : NextFunction) {

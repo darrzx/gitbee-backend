@@ -1,4 +1,4 @@
-import { defaultResponse } from '@/models/generic/response';
+import { defaultResponse } from '../../models/generic/response';
 import axios from 'axios';
 import { Response } from 'express';
 

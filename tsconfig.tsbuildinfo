@@ -1,0 +1,1 @@
+{"root":["./api/index.ts","./api/handlers/semester/semesterhandler.ts","./api/models/generic/response.ts","./api/routes/routes.ts","./api/routes/semester/semesterroutes.ts","./api/services/semester/semesterservice.ts","./api/utils/response/response.ts","./api/utils/validator/validateschema.ts"],"version":"5.6.2"}

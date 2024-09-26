@@ -2,7 +2,7 @@
   "compilerOptions": {
       "module": "commonjs",
       "target": "es6",
-      "rootDir": "./src",
+      "rootDir": "./api",
       "outDir": "./dist",
       "moduleResolution": "node",
       "esModuleInterop": true,
@@ -10,12 +10,12 @@
       "skipLibCheck": true,
       "baseUrl": ".",
       "paths": {
-          "@/*": ["./src/*"]
+          "@/*": ["./api/*"]
       },
   },
   "ts-node": {
     "require": ["tsconfig-paths/register"]
   },
-  "include": ["src/**/*"],
+  "include": ["api/**/*"],
   "exclude": ["node_modules", "**/*.spec.ts"]
 }

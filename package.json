@@ -4,7 +4,8 @@
   "description": "",
   "main": "api/index.ts",
   "scripts": {
-    "build": "tsc --project tsconfig.json && tsc-alias -p tsconfig.json",
+    "build": "tsc && tsc-alias",
+    "build:watch": "tsc && (concurrently \"tsc -w\" \"tsc-alias -w\")",
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node -r module-alias/register dist/index.js",
     "dev": "nodemon ./api/index"

@@ -1,4 +1,5 @@
 import express from "express";
+import authRoutes from "./auth/authRoutes";
 import semesterRoutes from "./semester/semesterRoutes";
 const routes = express.Router();
 
@@ -10,6 +11,7 @@ routes.get("/", (req, res) => {
   res.send("Welcome to GitBee");
 });
 
+routes.use("/auth", authRoutes);
 routes.use("/semester", semesterRoutes);
 
 export default routes;

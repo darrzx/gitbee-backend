@@ -1,0 +1,39 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model Project {
+  id                Int            @id @default(autoincrement())
+  lecturer_id       String         @db.VarChar(50)
+  student_leader_id String         @db.VarChar(50)
+  projectDetail     ProjectDetail? @relation("ProjectDetail")
+
+  @@map("project")
+}
+
+model ProjectDetail {
+  id                Int            @id @default(autoincrement())
+  project_id        Int            @unique
+  name              String         @db.VarChar(255)
+  semester_id       String         @db.VarChar(100)
+  course_id         String         @db.VarChar(50)
+  class             String         @db.VarChar(20)
+  link_submission   String         @db.VarChar(255)
+  documentation     String         @db.VarChar(255)
+  status_id         Int         
+  category_id       Int
+  project           Project        @relation("ProjectDetail", fields: [project_id], references: [id], onDelete: Cascade)
+
+  @@map("project_detail")
+}

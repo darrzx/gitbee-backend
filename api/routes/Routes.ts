@@ -2,6 +2,8 @@ import express from "express";
 import authRoutes from "./auth/authRoutes";
 import semesterRoutes from "./semester/semesterRoutes";
 import projectRoutes from "./project/projectRoutes";
+import statusRoutes from "./status/statusRoutes";
+import categoryRoutes from "./category/categoryRoutes";
 const routes = express.Router();
 
 routes.use((req, res, next) => {
@@ -15,5 +17,7 @@ routes.get("/", (req, res) => {
 routes.use("/auth", authRoutes);
 routes.use("/semester", semesterRoutes);
 routes.use("/project", projectRoutes);
+routes.use("/status", statusRoutes);
+routes.use("/category", categoryRoutes);
 
 export default routes;

@@ -14,26 +14,66 @@ datasource db {
 }
 
 model Project {
-  id                Int            @id @default(autoincrement())
-  lecturer_id       String         @db.VarChar(50)
-  student_leader_id String         @db.VarChar(50)
-  projectDetail     ProjectDetail? @relation("ProjectDetail")
+  id                Int             @id @default(autoincrement())
+  lecturer_id       String          @db.VarChar(50)
+  student_leader_id String          @db.VarChar(50)
+  projectDetail     ProjectDetail? 
+  projectGroups     ProjectGroup[]
+  gallery           Gallery[]
 
   @@map("project")
 }
 
 model ProjectDetail {
-  id                Int            @id @default(autoincrement())
-  project_id        Int            @unique
-  name              String         @db.VarChar(255)
-  semester_id       String         @db.VarChar(100)
-  course_id         String         @db.VarChar(50)
-  class             String         @db.VarChar(20)
-  link_submission   String         @db.VarChar(255)
-  documentation     String         @db.VarChar(255)
-  status_id         Int         
+  id                Int             @id @default(autoincrement())
+  project_id        Int             @unique
+  name              String          @db.VarChar(255)
+  semester_id       String          @db.VarChar(100)
+  course_id         String          @db.VarChar(50)
+  class             String          @db.VarChar(20)
+  github_link       String          @db.Text
+  project_link      String          @db.Text
+  documentation     String          @db.Text
+  thumbnail         String          @db.Text
+  status_id         Int
   category_id       Int
-  project           Project        @relation("ProjectDetail", fields: [project_id], references: [id], onDelete: Cascade)
+  project           Project         @relation(fields: [project_id], references: [id], onDelete: Cascade)
+  status            Status          @relation(fields: [status_id], references: [id], onDelete: Cascade)
+  category          Category        @relation(fields: [category_id], references: [id], onDelete: Cascade)
 
   @@map("project_detail")
+}
+
+model ProjectGroup {
+  id                Int             @id @default(autoincrement())
+  project_id        Int     
+  student_id        String          @db.VarChar(50)
+  project           Project         @relation(fields: [project_id], references: [id], onDelete: Cascade)
+
+  @@map("project_group")
+}
+
+model Gallery {
+  id                Int             @id @default(autoincrement())
+  project_id        Int     
+  image             String          @db.Text
+  project           Project         @relation(fields: [project_id], references: [id], onDelete: Cascade)
+
+  @@map("gallery")
+}
+
+model Status {
+  id                Int             @id @default(autoincrement())
+  name              String          @db.VarChar(50)
+  projectDetails    ProjectDetail[] 
+
+  @@map("status")
+}
+
+model Category {
+  id                Int             @id @default(autoincrement())
+  name              String          @db.VarChar(100)
+  projectDetails    ProjectDetail[] 
+
+  @@map("category")
 }

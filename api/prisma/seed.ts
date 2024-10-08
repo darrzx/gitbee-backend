@@ -1,4 +1,4 @@
-import { statuses } from "./seed/status";
+import { statuses } from "./seeds/status";
 import { PrismaClient } from "@prisma/client";
 const prisma = new PrismaClient();
 

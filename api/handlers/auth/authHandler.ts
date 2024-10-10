@@ -1,10 +1,10 @@
+import { z } from "zod";
 import { parseJwt } from "api/utils/auth/auth";
+import type { Request, Response } from "express";
+import { createToken } from "api/utils/auth/auth";
 import { sendErrorResponse } from "api/utils/response/response";
 import GenericService from "api/services/generic/genericService";
-import { createToken } from "api/utils/auth/auth";
 import { sendSuccessResponse } from "api/utils/response/response";
-import type { Request, Response } from "express";
-import { z } from "zod";
 
 export default class AuthHandler {
     static async login(req: Request, res: Response) {
@@ -33,9 +33,9 @@ export default class AuthHandler {
                 return sendErrorResponse(res, "Failed to fetch Binusian data", 401);
             }
 
-            const username = atlantis.data.BinusianID ? atlantis.data.BinusianID : "BN124298983";
-            const nim = atlantis.data.NIM ? atlantis.data.NIM : "";
-            const role = atlantis.data.KodeDosen !== null ? "Lecturer" : "Student";
+            const username = atlantis.data.BinusianID ?? "BN124298983";
+            const nim = atlantis.data.NIM ?? "";
+            const role = atlantis.data.KodeDosen ? "Lecturer" : "Student";
 
             const token = createToken(
                 nim,

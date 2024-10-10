@@ -14,12 +14,15 @@ datasource db {
 }
 
 model Project {
-  id                Int             @id @default(autoincrement())
-  lecturer_id       String          @db.VarChar(50)
-  student_leader_id String          @db.VarChar(50)
-  projectDetail     ProjectDetail? 
-  projectGroups     ProjectGroup[]
-  gallery           Gallery[]
+  id                  Int                @id @default(autoincrement())
+  lecturer_id         String             @db.VarChar(50)
+  student_leader_id   String             @db.VarChar(50)
+  projectDetail       ProjectDetail? 
+  assessement         Assessement? 
+  recommendedProject  RecommendedProject? 
+  projectGroups       ProjectGroup[]
+  galleries           Gallery[]
+  projectTechnologies ProjectTechnology[]
 
   @@map("project")
 }
@@ -42,6 +45,28 @@ model ProjectDetail {
   category          Category        @relation(fields: [category_id], references: [id], onDelete: Cascade)
 
   @@map("project_detail")
+}
+
+model Assessement {
+  id                Int             @id @default(autoincrement())
+  project_id        Int             @unique
+  score             Int         
+  feedback          String          @db.Text
+  created_at         DateTime        @default(now())
+  project           Project         @relation(fields: [project_id], references: [id], onDelete: Cascade)
+
+  @@map("assessement")
+}
+
+model RecommendedProject {
+  id                Int             @id @default(autoincrement())
+  project_id        Int             @unique
+  score             Int         
+  feedback          String          @db.Text
+  created_at        DateTime        @default(now())
+  project           Project         @relation(fields: [project_id], references: [id], onDelete: Cascade)
+
+  @@map("recommended_project")
 }
 
 model ProjectGroup {
@@ -76,4 +101,23 @@ model Category {
   projectDetails    ProjectDetail[] 
 
   @@map("category")
+}
+
+model Technology {
+  id                   Int                 @id @default(autoincrement())
+  name                 String              @db.VarChar(100)
+  projectTechnologies  ProjectTechnology[]
+
+  @@map("technology")
+}
+
+model ProjectTechnology {
+  id            Int         @id @default(autoincrement())
+  project_id    Int
+  technology_id Int
+  project       Project     @relation(fields: [project_id], references: [id], onDelete: Cascade)
+  technology    Technology  @relation(fields: [technology_id], references: [id], onDelete: Cascade)
+
+  @@unique([project_id, technology_id])
+  @@map("project_technology")
 }

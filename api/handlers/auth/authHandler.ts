@@ -34,15 +34,23 @@ export default class AuthHandler {
             }
 
             const username = atlantis.data.BinusianID ? atlantis.data.BinusianID : "BN124298983";
+            const nim = atlantis.data.NIM ? atlantis.data.NIM : "";
+            const role = atlantis.data.KodeDosen !== null ? "Lecturer" : "Student";
 
-            const token = createToken(username, "Student");
+            const token = createToken(
+                nim,
+                username,
+                name.toLowerCase(),
+                email.toLowerCase(),
+                role
+            );
 
             return sendSuccessResponse(res, {
                 UserName: username,
                 BinusianId: username,
                 Name: name.toUpperCase(),
                 Email: email.toLowerCase(),
-                Role: "Student",
+                Role: role,
             }, {
                 name: process.env.COOKIE_NAME,
                 value: token.token,

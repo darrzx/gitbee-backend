@@ -8,12 +8,22 @@ const addHour = (hour: number) => {
     now.setTime(now.getTime() + (hour * 60 * 60 * 1000))
     return now;
 }
-export const createToken = (username: string, role: string, messier_id?: string) => {
+export const createToken = (
+    nim: string,
+    username: string,
+    name: string,
+    email: string,
+    role: string,
+    messier_id?: string
+    ) => {
     const expire = Math.floor(Date.now() / 1000) + (60 * 60);
     const token = jwt.sign({
         exp: expire,
-        username: username,
+        nim: nim,
         role: role,
+        binusianId: username,
+        name: name.toUpperCase(),
+        email: email.toLowerCase(),
         messier_id: messier_id
     }, secret);
     return {

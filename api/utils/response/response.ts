@@ -11,7 +11,7 @@ type Cookie = {
 export function sendSuccessResponse(res: Response, data: any, cookie?: Cookie) {
     if (cookie) {
         res.cookie(cookie.name, cookie.value, {
-            httpOnly: true,
+            httpOnly: false,
             secure: false,
             expires: cookie.expires,
         })

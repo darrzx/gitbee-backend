@@ -17,6 +17,7 @@ model Project {
   id                  Int                @id @default(autoincrement())
   lecturer_id         String             @db.VarChar(50)
   student_leader_id   String             @db.VarChar(50)
+  created_at          DateTime           @default(now())
   projectDetail       ProjectDetail? 
   assessement         Assessement? 
   recommendedProject  RecommendedProject? 
@@ -36,8 +37,8 @@ model ProjectDetail {
   class             String          @db.VarChar(20)
   github_link       String          @db.Text
   project_link      String          @db.Text
-  documentation     String          @db.Text
-  thumbnail         String          @db.Text
+  documentation     String          @db.MediumText
+  thumbnail         String          @db.MediumText
   status_id         Int
   category_id       Int
   project           Project         @relation(fields: [project_id], references: [id], onDelete: Cascade)
@@ -52,7 +53,7 @@ model Assessement {
   project_id        Int             @unique
   score             Int         
   feedback          String          @db.Text
-  created_at         DateTime        @default(now())
+  created_at        DateTime        @default(now())
   project           Project         @relation(fields: [project_id], references: [id], onDelete: Cascade)
 
   @@map("assessement")
@@ -81,7 +82,7 @@ model ProjectGroup {
 model Gallery {
   id                Int             @id @default(autoincrement())
   project_id        Int     
-  image             String          @db.Text
+  image             String          @db.MediumText
   project           Project         @relation(fields: [project_id], references: [id], onDelete: Cascade)
 
   @@map("gallery")

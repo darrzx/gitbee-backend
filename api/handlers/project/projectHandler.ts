@@ -22,7 +22,9 @@ export default class ProjectHandler {
                 thumbnail: z.string(),
                 status_id: z.number(),
                 category_id: z.number(),
-                major_id: z.number()
+                major_id: z.number(),
+                gallery: z.array(z.string()),
+                group_members: z.array(z.string()).optional()
             });
       
             const validationResult = validateSchema(schema, req.body);
@@ -30,21 +32,7 @@ export default class ProjectHandler {
                 return sendErrorResponse(res, validationResult.details);
             }
 
-            const params = {
-                lecturer_id: validationResult.data.lecturer_id,
-                student_leader_id: validationResult.data.student_leader_id,
-                name: validationResult.data.name,
-                semester_id: validationResult.data.semester_id,
-                course_id: validationResult.data.course_id,
-                class: validationResult.data.class,
-                github_link: validationResult.data.github_link,
-                project_link: validationResult.data.project_link,
-                documentation: validationResult.data.documentation,
-                thumbnail: validationResult.data.thumbnail,
-                status_id: validationResult.data.status_id,
-                category_id: validationResult.data.category_id,
-                major_id: validationResult.data.major_id
-            };
+            const params = validationResult.data;
 
             const newProject = await prisma.project.create({
                 data: {
@@ -69,6 +57,24 @@ export default class ProjectHandler {
                   major_id: params.major_id
                 },
             });
+
+            const newGallery = params.gallery.map(image => ({
+                project_id: newProject.id,
+                image
+            }));
+            await prisma.gallery.createMany({
+                data: newGallery
+            });
+    
+            if (params.group_members && params.group_members.length > 0) {
+                const newProjectGroup = params.group_members.map(student_id => ({
+                    project_id: newProject.id,
+                    student_id: student_id
+                }));
+                await prisma.projectGroup.createMany({
+                    data: newProjectGroup
+                });
+            }
         
             sendSuccessResponse(res, { newProject, newProjectDetail });
         } catch (error) {

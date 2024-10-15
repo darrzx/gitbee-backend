@@ -41,9 +41,11 @@ model ProjectDetail {
   thumbnail         String          @db.MediumText
   status_id         Int
   category_id       Int
+  major_id          Int
   project           Project         @relation(fields: [project_id], references: [id], onDelete: Cascade)
   status            Status          @relation(fields: [status_id], references: [id], onDelete: Cascade)
   category          Category        @relation(fields: [category_id], references: [id], onDelete: Cascade)
+  major             Major           @relation(fields: [major_id], references: [id], onDelete: Cascade)
 
   @@map("project_detail")
 }
@@ -121,4 +123,12 @@ model ProjectTechnology {
 
   @@unique([project_id, technology_id])
   @@map("project_technology")
+}
+
+model Major {
+  id                Int             @id @default(autoincrement())
+  name              String          @db.VarChar(100)
+  projectDetails    ProjectDetail[] 
+
+  @@map("major")
 }

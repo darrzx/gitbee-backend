@@ -1,4 +1,5 @@
 import { categories } from "./seeds/category";
+import { majors } from "./seeds/major";
 import { statuses } from "./seeds/status";
 import { technologies } from "./seeds/technology";
 import { PrismaClient } from "@prisma/client";
@@ -8,10 +9,12 @@ async function main() {
     await prisma.status.deleteMany({});
     await prisma.category.deleteMany({});
     await prisma.technology.deleteMany({});
+    await prisma.major.deleteMany({});
 
     await prisma.$executeRaw`ALTER TABLE status AUTO_INCREMENT = 1`;
     await prisma.$executeRaw`ALTER TABLE category AUTO_INCREMENT = 1`;
     await prisma.$executeRaw`ALTER TABLE technology AUTO_INCREMENT = 1`;
+    await prisma.$executeRaw`ALTER TABLE major AUTO_INCREMENT = 1`;
 
     // Seed statuses
     await prisma.status.createMany({
@@ -30,6 +33,12 @@ async function main() {
         data: technologies
     });
     console.log('Technology data seeded successfully.');
+
+    // Seed majors
+    await prisma.major.createMany({
+        data: majors
+    });
+    console.log('Major data seeded successfully.');
 }
 
 main().catch(e => {

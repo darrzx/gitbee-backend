@@ -21,7 +21,8 @@ export default class ProjectHandler {
                 documentation: z.string(),
                 thumbnail: z.string(),
                 status_id: z.number(),
-                category_id: z.number() 
+                category_id: z.number(),
+                major_id: z.number()
             });
       
             const validationResult = validateSchema(schema, req.body);
@@ -42,6 +43,7 @@ export default class ProjectHandler {
                 thumbnail: validationResult.data.thumbnail,
                 status_id: validationResult.data.status_id,
                 category_id: validationResult.data.category_id,
+                major_id: validationResult.data.major_id
             };
 
             const newProject = await prisma.project.create({
@@ -63,7 +65,8 @@ export default class ProjectHandler {
                   documentation: params.documentation,
                   thumbnail: params.thumbnail,
                   status_id: params.status_id,
-                  category_id: params.category_id
+                  category_id: params.category_id,
+                  major_id: params.major_id
                 },
             });
         

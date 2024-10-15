@@ -4,6 +4,7 @@ import semesterRoutes from "./semester/semesterRoutes";
 import projectRoutes from "./project/projectRoutes";
 import statusRoutes from "./status/statusRoutes";
 import categoryRoutes from "./category/categoryRoutes";
+import technologyRoutes from "./technology/technologyRoutes";
 const routes = express.Router();
 
 routes.use((req, res, next) => {
@@ -19,5 +20,6 @@ routes.use("/semester", semesterRoutes);
 routes.use("/project", projectRoutes);
 routes.use("/status", statusRoutes);
 routes.use("/category", categoryRoutes);
+routes.use("/technology", technologyRoutes);
 
 export default routes;

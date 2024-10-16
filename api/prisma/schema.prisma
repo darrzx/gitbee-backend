@@ -31,13 +31,14 @@ model Project {
 model ProjectDetail {
   id                Int             @id @default(autoincrement())
   project_id        Int             @unique
-  name              String          @db.VarChar(255)
+  title             String          @db.VarChar(255)
   semester_id       String          @db.VarChar(100)
   course_id         String          @db.VarChar(50)
   class             String          @db.VarChar(20)
   github_link       String          @db.Text
   project_link      String          @db.Text
   documentation     String          @db.MediumText
+  description       String          @db.Text
   thumbnail         String          @db.MediumText
   status_id         Int
   category_id       Int

@@ -24,7 +24,8 @@ export default class ProjectHandler {
                 category_id: z.number(),
                 major_id: z.number(),
                 gallery: z.array(z.string()),
-                group_members: z.array(z.string()).optional()
+                group_members: z.array(z.string()).optional(),
+                technology_ids: z.array(z.number())
             });
       
             const validationResult = validateSchema(schema, req.body);
@@ -65,6 +66,14 @@ export default class ProjectHandler {
             await prisma.gallery.createMany({
                 data: newGallery
             });
+
+            const newProjectTechnology = params.technology_ids.map(technology_id => ({
+                project_id: newProject.id,
+                technology_id
+            }));
+            await prisma.projectTechnology.createMany({
+                data: newProjectTechnology
+            });
     
             if (params.group_members && params.group_members.length > 0) {
                 const newProjectGroup = params.group_members.map(student_id => ({
@@ -79,6 +88,34 @@ export default class ProjectHandler {
             sendSuccessResponse(res, { newProject, newProjectDetail });
         } catch (error) {
             sendErrorResponse(res, error.message ? error.message : "Insert Project Failed");
+        }
+    }
+
+    static async getAllProject(req : Request, res : Response, next : NextFunction) {
+        try {
+            const schema = z.object({
+                search: z.string().optional(),
+                categoryFilter: z.string().optional(),
+                majorFilter: z.string().optional(),
+                technologyFilter: z.string().optional()
+            });
+
+            const validationResult = validateSchema(schema, req.query);
+
+            if (validationResult.error) {
+                return sendErrorResponse(res, validationResult.message ? validationResult.message : "Fetch Failed");
+            }
+
+            const projects = await prisma.project.findMany({
+                include: {
+                    projectDetail: true,
+                    projectGroups: true,
+                    galleries: true
+                }
+            });
+            sendSuccessResponse(res, projects);
+        } catch (error) {
+            sendErrorResponse(res, error.message ? error.message : "Fetch Failed");
         }
     }
 }

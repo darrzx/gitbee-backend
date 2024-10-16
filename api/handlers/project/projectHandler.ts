@@ -12,7 +12,7 @@ export default class ProjectHandler {
             const schema = z.object({ 
                 lecturer_id: z.string(),
                 student_leader_id: z.string(),
-                name: z.string(),
+                title: z.string(),
                 semester_id: z.string(),
                 course_id: z.string(),
                 class: z.string(),
@@ -20,6 +20,7 @@ export default class ProjectHandler {
                 project_link: z.string(),
                 documentation: z.string(),
                 thumbnail: z.string(),
+                description: z.string(),
                 status_id: z.number(),
                 category_id: z.number(),
                 major_id: z.number(),
@@ -45,7 +46,7 @@ export default class ProjectHandler {
             const newProjectDetail = await prisma.projectDetail.create({
                 data: {
                   project_id: newProject.id,
-                  name: params.name,
+                  title: params.title,
                   semester_id: params.semester_id,
                   course_id: params.course_id,
                   class: params.class,
@@ -53,6 +54,7 @@ export default class ProjectHandler {
                   project_link: params.project_link,
                   documentation: params.documentation,
                   thumbnail: params.thumbnail,
+                  description: params.description,
                   status_id: params.status_id,
                   category_id: params.category_id,
                   major_id: params.major_id
@@ -110,7 +112,7 @@ export default class ProjectHandler {
             const whereCondition = {
                 ...(params.search && {
                     OR: [
-                        { projectDetail: { name: { contains: params.search } } },
+                        { projectDetail: { title: { contains: params.search } } },
                         { projectGroups: { some: { student_id: { contains: params.search } } } }
                     ]
                 }),

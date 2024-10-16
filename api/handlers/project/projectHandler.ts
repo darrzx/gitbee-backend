@@ -106,11 +106,32 @@ export default class ProjectHandler {
                 return sendErrorResponse(res, validationResult.message ? validationResult.message : "Fetch Failed");
             }
 
+            const params = validationResult.data;
+            const whereCondition = {
+                ...(params.search && {
+                    OR: [
+                        { projectDetail: { name: { contains: params.search } } },
+                        { projectGroups: { some: { student_id: { contains: params.search } } } }
+                    ]
+                }),
+                ...(params.categoryFilter && {
+                    projectDetail: { category_id: Number(params.categoryFilter) }
+                }),
+                ...(params.majorFilter && {
+                    projectDetail: { major_id: Number(params.majorFilter) }
+                }),
+                ...(params.technologyFilter && {
+                    projectTechnologies: { some: { technology_id: Number(params.technologyFilter) } } // Direct equality for numeric filters
+                })
+            };
+
             const projects = await prisma.project.findMany({
+                where: whereCondition,
                 include: {
                     projectDetail: true,
                     projectGroups: true,
-                    galleries: true
+                    galleries: true,
+                    projectTechnologies: true
                 }
             });
             sendSuccessResponse(res, projects);

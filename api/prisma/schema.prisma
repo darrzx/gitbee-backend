@@ -135,3 +135,16 @@ model Major {
 
   @@map("major")
 }
+
+model TemporaryGroup {
+  id                    Int             @id @default(autoincrement())
+  semester_id           String          @db.VarChar(100)
+  course_id             String          @db.VarChar(50)
+  class                 String          @db.VarChar(20)
+  name                  Int             
+  student_id            String          @db.VarChar(50)
+  student_name          String          @db.VarChar(200)
+  student_binusian_id   String          @db.VarChar(150)
+
+  @@map("temporary_group")
+}

@@ -74,10 +74,12 @@ model RecommendedProject {
 }
 
 model ProjectGroup {
-  id                Int             @id @default(autoincrement())
-  project_id        Int     
-  student_id        String          @db.VarChar(50)
-  project           Project         @relation(fields: [project_id], references: [id], onDelete: Cascade)
+  id                    Int             @id @default(autoincrement())
+  project_id            Int     
+  student_id            String          @db.VarChar(50)
+  student_name          String          @db.VarChar(200)
+  student_binusian_id   String          @db.VarChar(150)
+  project               Project         @relation(fields: [project_id], references: [id], onDelete: Cascade)
 
   @@map("project_group")
 }

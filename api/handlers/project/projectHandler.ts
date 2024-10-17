@@ -2,7 +2,6 @@ import { z } from "zod";
 import type { Request, Response, NextFunction } from "express";
 import { sendErrorResponse, sendSuccessResponse } from "../../utils/response/response";
 import validateSchema from "api/utils/validator/validateSchema";
-import TechnologyHandler from "api/handlers/technology/technologyHandler";
 import GenericService from "api/services/generic/genericService";
 import { PrismaClient } from "@prisma/client";
 
@@ -79,11 +78,28 @@ export default class ProjectHandler {
                 data: newProjectTechnology
             });
     
-            if (params.group_members && params.group_members.length > 0) {
-                const newProjectGroup = params.group_members.map(student_id => ({
-                    project_id: newProject.id,
-                    student_id: student_id
-                }));
+            let groupMembers = params.group_members || [];
+            if (!groupMembers.includes(params.student_leader_id)) {
+                groupMembers.push(params.student_leader_id);
+            }
+
+            if (groupMembers.length > 0) {
+                const newProjectGroupPromises = groupMembers.map(async (student_id) => {
+                    const nameResponse = await GenericService.getName(student_id);
+                    const BinusianIdResponse = await GenericService.getBinusianID(student_id);
+                    const name = nameResponse.data ?? student_id;
+                    const binusianId = BinusianIdResponse.data ?? student_id;
+
+                    return {
+                        project_id: newProject.id,
+                        student_id,
+                        student_name: name,
+                        student_binusian_id: binusianId
+                    };
+                });
+            
+                const newProjectGroup = await Promise.all(newProjectGroupPromises);
+            
                 await prisma.projectGroup.createMany({
                     data: newProjectGroup
                 });
@@ -114,7 +130,9 @@ export default class ProjectHandler {
                 ...(params.search && {
                     OR: [
                         { projectDetail: { title: { contains: params.search } } },
-                        { projectGroups: { some: { student_id: { contains: params.search } } } }
+                        { projectGroups: { some: { student_name: { contains: params.search } } } },
+                        { projectGroups: { some: { student_id: { contains: params.search } } } },
+                        { projectGroups: { some: { student_binusian_id: { contains: params.search } } } }
                     ]
                 }),
                 ...(params.categoryFilter && {
@@ -124,7 +142,7 @@ export default class ProjectHandler {
                     projectDetail: { major_id: Number(params.majorFilter) }
                 }),
                 ...(params.technologyFilter && {
-                    projectTechnologies: { some: { technology_id: Number(params.technologyFilter) } } // Direct equality for numeric filters
+                    projectTechnologies: { some: { technology_id: Number(params.technologyFilter) } }
                 })
             };
 
@@ -139,22 +157,10 @@ export default class ProjectHandler {
             });
 
             const updatedProjects = await Promise.all(projects.map(async (project) => {
-                const updatedProjectGroups = await Promise.all(
-                    project.projectGroups.map(async (group) => {
-                        const nameResponse = await GenericService.getName(group.student_id);
-                        const name = nameResponse.data ?? group.student_id;
-    
-                        const BinusianIDResponse = await GenericService.getBinusianID(group.student_id);
-                        const BinusianID = BinusianIDResponse.data ?? group.student_id;
-    
-                        const { id, project_id, ...otherAttributes } = group;
-                        return {
-                            ...otherAttributes,
-                            student_name: name,
-                            student_binusian_id: BinusianID
-                        };
-                    })
-                );
+                const updatedProjectGroups = project.projectGroups.map(group => {
+                    const { id, project_id, ...otherAttributes } = group;
+                    return otherAttributes;
+                });
     
                 const updatedGalleries = project.galleries.map(gallery => {
                     const { id, project_id, ...otherAttributes } = gallery;
@@ -181,7 +187,7 @@ export default class ProjectHandler {
                     projectTechnologies: updatedProjectTechnologies
                 };
             }));
-    
+
             sendSuccessResponse(res, updatedProjects);
         } catch (error) {
             sendErrorResponse(res, error.message ? error.message : "Fetch Failed");

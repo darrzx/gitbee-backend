@@ -1,7 +1,9 @@
+import { z } from "zod";
 import type { Request, Response, NextFunction } from "express";
 import { sendErrorResponse, sendSuccessResponse } from "../../utils/response/response";
 import validateSchema from "api/utils/validator/validateSchema";
-import { z } from "zod";
+import TechnologyHandler from "api/handlers/technology/technologyHandler";
+import GenericService from "api/services/generic/genericService";
 import { PrismaClient } from "@prisma/client";
 
 const prisma = new PrismaClient();
@@ -103,7 +105,6 @@ export default class ProjectHandler {
             });
 
             const validationResult = validateSchema(schema, req.query);
-
             if (validationResult.error) {
                 return sendErrorResponse(res, validationResult.message ? validationResult.message : "Fetch Failed");
             }
@@ -136,7 +137,52 @@ export default class ProjectHandler {
                     projectTechnologies: true
                 }
             });
-            sendSuccessResponse(res, projects);
+
+            const updatedProjects = await Promise.all(projects.map(async (project) => {
+                const updatedProjectGroups = await Promise.all(
+                    project.projectGroups.map(async (group) => {
+                        const nameResponse = await GenericService.getName(group.student_id);
+                        const name = nameResponse.data ?? group.student_id;
+    
+                        const BinusianIDResponse = await GenericService.getBinusianID(group.student_id);
+                        const BinusianID = BinusianIDResponse.data ?? group.student_id;
+    
+                        const { id, project_id, ...otherAttributes } = group;
+                        return {
+                            ...otherAttributes,
+                            student_name: name,
+                            student_binusian_id: BinusianID
+                        };
+                    })
+                );
+    
+                const updatedGalleries = project.galleries.map(gallery => {
+                    const { id, project_id, ...otherAttributes } = gallery;
+                    return otherAttributes;
+                });
+
+                const updatedProjectTechnologies = await Promise.all(
+                    project.projectTechnologies.map(async (technology) => {
+                        const technologyDetails = await prisma.technology.findUnique({
+                            where: { id: technology.technology_id }
+                        });
+                        const { id, project_id, ...otherAttributes } = technology;
+                        return {
+                            ...otherAttributes,
+                            technology_name: technologyDetails.name
+                        };
+                    })
+                );
+    
+                return {
+                    ...project,
+                    projectGroups: updatedProjectGroups,
+                    galleries: updatedGalleries,
+                    projectTechnologies: updatedProjectTechnologies
+                };
+            }));
+    
+            sendSuccessResponse(res, updatedProjects);
         } catch (error) {
             sendErrorResponse(res, error.message ? error.message : "Fetch Failed");
         }

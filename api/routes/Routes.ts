@@ -6,6 +6,7 @@ import statusRoutes from "./status/statusRoutes";
 import categoryRoutes from "./category/categoryRoutes";
 import technologyRoutes from "./technology/technologyRoutes";
 import majorRoutes from "./major/majorRoutes";
+import userRoutes from "./user/userRoutes";
 const routes = express.Router();
 
 routes.use((req, res, next) => {
@@ -17,6 +18,7 @@ routes.get("/", (req, res) => {
 });
 
 routes.use("/auth", authRoutes);
+routes.use("/user", userRoutes);
 routes.use("/semester", semesterRoutes);
 routes.use("/project", projectRoutes);
 routes.use("/status", statusRoutes);

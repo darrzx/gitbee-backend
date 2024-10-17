@@ -40,4 +40,54 @@ export default class GenericService {
       };
     }
   };  
+
+  static async getName(credential: string) : Promise<APIResponse> {
+    try {
+      const result = await this.getAtlantisData(credential);
+
+      let name = "";
+      if (result.data.hasOwnProperty('Name') && result.data.hasOwnProperty('email') && result.data.email) {
+          name = result.data.Name === "" ? result.data.email[0].Email : result.data.Name;
+      }
+
+      return {
+        message: "successful",
+        status: true,
+        data: name,
+      } as APIResponse;
+
+    } catch (error) {
+      const err = getErrors(error);
+      return {
+        ...defaultResponse,
+        errors: err,
+        data: null,
+      };
+    }
+  }
+
+  static async getBinusianID(credential: string) : Promise<APIResponse> {
+    try {
+      const result = await this.getAtlantisData(credential);
+
+      let BinusianID = "";
+      if (result.data.hasOwnProperty('BinusianID') && result.data.hasOwnProperty('email') && result.data.email) {
+        BinusianID = result.data.BinusianID === "" ? result.data.email[0].Email : result.data.BinusianID;
+      }
+
+      return {
+        message: "successful",
+        status: true,
+        data: BinusianID,
+      } as APIResponse;
+
+    } catch (error) {
+      const err = getErrors(error);
+      return {
+        ...defaultResponse,
+        errors: err,
+        data: null,
+      };
+    }
+  }
 }

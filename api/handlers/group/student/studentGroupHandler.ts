@@ -32,14 +32,14 @@ export default class StudentGroupHandler {
                     class: params.class
                 },
                 orderBy: {
-                    name: 'desc'
+                    group: 'desc'
                 },
                 select: {
-                    name: true
+                    group: true
                 }
             });
     
-            const nextName = maxName ? maxName.name + 1 : 1;
+            const nextName = maxName ? maxName.group + 1 : 1;
     
             const insertedGroups = await Promise.all(studentIds.map(async (student_id) => {
                 const nameResponse = await GenericService.getName(student_id);
@@ -53,7 +53,7 @@ export default class StudentGroupHandler {
                         semester_id: params.semester_id,
                         course_id: params.course_id,
                         class: params.class,
-                        name: nextName,
+                        group: nextName,
                         student_id,
                         student_name,
                         student_binusian_id
@@ -102,7 +102,7 @@ export default class StudentGroupHandler {
                     semester_id: params.semester_id,
                     course_id: params.course_id,
                     class: params.class,
-                    name: currentStudentGroup.name
+                    group: currentStudentGroup.group
                 }
             });
     

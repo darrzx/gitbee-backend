@@ -3,6 +3,6 @@ import LecturerGroupHandler from "api/handlers/group/lecturer/lecturerGroupHandl
 
 const lecturerGroupRoutes = express.Router();
 
-lecturerGroupRoutes.get("/current", LecturerGroupHandler.getStudentGroup);
+lecturerGroupRoutes.get("/class-group", LecturerGroupHandler.getClassGroup);
 
 export default lecturerGroupRoutes;

@@ -7,7 +7,7 @@ import { PrismaClient } from "@prisma/client";
 const prisma = new PrismaClient();
 
 export default class LecturerGroupHandler {
-    static async getStudentGroup(req : Request, res : Response, next : NextFunction) {
+    static async getClassGroup(req : Request, res : Response, next : NextFunction) {
         try {
             const schema = z.object({
                 semester_id: z.string(),

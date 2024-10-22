@@ -7,7 +7,7 @@ import categoryRoutes from "./category/categoryRoutes";
 import technologyRoutes from "./technology/technologyRoutes";
 import majorRoutes from "./major/majorRoutes";
 import userRoutes from "./user/userRoutes";
-import groupRoutes from "./group/gropuRoutes";
+import groupRoutes from "./group/groupRoutes";
 const routes = express.Router();
 
 routes.use((req, res, next) => {

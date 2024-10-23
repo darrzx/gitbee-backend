@@ -19,7 +19,7 @@ model Project {
   student_leader_id   String             @db.VarChar(50)
   created_at          DateTime           @default(now())
   projectDetail       ProjectDetail? 
-  assessement         Assessement? 
+  assessment         Assessment? 
   recommendedProject  RecommendedProject? 
   projectGroups       ProjectGroup[]
   galleries           Gallery[]
@@ -51,21 +51,21 @@ model ProjectDetail {
   @@map("project_detail")
 }
 
-model Assessement {
+model Assessment {
   id                Int             @id @default(autoincrement())
   project_id        Int             @unique
-  score             Int         
-  feedback          String          @db.Text
+  grade             Int         
+  reason            String          @db.Text
   created_at        DateTime        @default(now())
   project           Project         @relation(fields: [project_id], references: [id], onDelete: Cascade)
 
-  @@map("assessement")
+  @@map("assessment")
 }
 
 model RecommendedProject {
   id                Int             @id @default(autoincrement())
   project_id        Int             @unique
-  score             Int         
+  grade             Int         
   feedback          String          @db.Text
   created_at        DateTime        @default(now())
   project           Project         @relation(fields: [project_id], references: [id], onDelete: Cascade)
@@ -147,4 +147,15 @@ model TemporaryGroup {
   student_binusian_id   String          @db.VarChar(150)
 
   @@map("temporary_group")
+}
+
+model Class {
+  id                    Int             @id @default(autoincrement())
+  semester_id           String          @db.VarChar(100)
+  course_id             String          @db.VarChar(50)
+  class                 String          @db.VarChar(20)
+  lecturer_id           String          @db.VarChar(50)
+  finalized_at          DateTime        @default(now())
+
+  @@map("class")
 }

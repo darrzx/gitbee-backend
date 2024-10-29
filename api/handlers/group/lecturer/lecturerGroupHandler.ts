@@ -84,7 +84,7 @@ export default class LecturerGroupHandler {
     
             sendSuccessResponse(res, deletedGroup);
         } catch (error) {
-            sendErrorResponse(res, error.message ? error.message : "Fetch Failed");
+            sendErrorResponse(res, error.message ? error.message : "Delete Failed");
         }
     }
 }

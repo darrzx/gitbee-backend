@@ -51,7 +51,7 @@ export default class AssessmentHandler {
     
             sendSuccessResponse(res, { insertedAssessments, finalizeClass });
         } catch (error) {
-            sendErrorResponse(res, error.message ? error.message : "Fetch Failed");
+            sendErrorResponse(res, error.message ? error.message : "Insert Failed");
         }
     }
 }

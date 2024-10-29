@@ -63,7 +63,7 @@ export default class StudentGroupHandler {
     
             sendSuccessResponse(res, insertedGroups);
         } catch (error) {
-            sendErrorResponse(res, error.message ? error.message : "Failed to insert group.");
+            sendErrorResponse(res, error.message ? error.message : "Insert Failed");
         }
     }
 

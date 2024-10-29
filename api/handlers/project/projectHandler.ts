@@ -107,7 +107,7 @@ export default class ProjectHandler {
         
             sendSuccessResponse(res, { newProject, newProjectDetail });
         } catch (error) {
-            sendErrorResponse(res, error.message ? error.message : "Insert Project Failed");
+            sendErrorResponse(res, error.message ? error.message : "Insert Failed");
         }
     }
 

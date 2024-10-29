@@ -2,9 +2,8 @@ import { z } from "zod";
 import { parseJwt } from "api/utils/auth/auth";
 import type { Request, Response } from "express";
 import { createToken } from "api/utils/auth/auth";
-import { sendErrorResponse } from "api/utils/response/response";
+import { sendSuccessResponse, sendErrorResponse } from "api/utils/response/response";
 import GenericService from "api/services/generic/genericService";
-import { sendSuccessResponse } from "api/utils/response/response";
 
 export default class AuthHandler {
     static async login(req: Request, res: Response) {

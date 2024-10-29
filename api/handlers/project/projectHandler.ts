@@ -1,6 +1,6 @@
 import { z } from "zod";
 import type { Request, Response, NextFunction } from "express";
-import { sendErrorResponse, sendSuccessResponse } from "../../utils/response/response";
+import { sendErrorResponse, sendSuccessResponse } from "api/utils/response/response";
 import validateSchema from "api/utils/validator/validateSchema";
 import GenericService from "api/services/generic/genericService";
 import { PrismaClient } from "@prisma/client";

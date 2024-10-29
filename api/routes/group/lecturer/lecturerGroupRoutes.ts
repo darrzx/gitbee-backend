@@ -4,5 +4,6 @@ import LecturerGroupHandler from "api/handlers/group/lecturer/lecturerGroupHandl
 const lecturerGroupRoutes = express.Router();
 
 lecturerGroupRoutes.get("/class-group", LecturerGroupHandler.getClassGroup);
+lecturerGroupRoutes.patch("/cancel", LecturerGroupHandler.cancelTemporaryGroup);
 
 export default lecturerGroupRoutes;

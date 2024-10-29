@@ -27,11 +27,11 @@ export default class LecturerGroupHandler {
                 class: params.class
             };
     
-            const StudentGroup = await prisma.temporaryGroup.findMany({
+            const studentGroup = await prisma.temporaryGroup.findMany({
                 where: whereCondition
             });
     
-            const groupedData = StudentGroup.reduce((acc: any, current: any) => {
+            const groupedData = studentGroup.reduce((acc: any, current: any) => {
                 const groupName = current.group;
 
                 if (!acc[groupName]) {
@@ -51,6 +51,38 @@ export default class LecturerGroupHandler {
                 }));
     
             sendSuccessResponse(res, sortedGroups);
+        } catch (error) {
+            sendErrorResponse(res, error.message ? error.message : "Fetch Failed");
+        }
+    }
+
+    static async cancelTemporaryGroup(req : Request, res : Response, next : NextFunction) {
+        try {
+            const schema = z.object({
+                semester_id: z.string(),
+                course_id: z.string(),
+                class: z.string(),
+                group: z.string()
+            });
+    
+            const validationResult = validateSchema(schema, req.query);
+            if (validationResult.error) {
+                return sendErrorResponse(res, validationResult.message ? validationResult.message : "Invalid Parameters");
+            }
+    
+            const params = validationResult.data;
+            const whereCondition = {
+                semester_id: params.semester_id,
+                course_id: params.course_id,
+                class: params.class,
+                group: Number(params.group)
+            };
+    
+            const deletedGroup = await prisma.temporaryGroup.deleteMany({
+                where: whereCondition
+            });
+    
+            sendSuccessResponse(res, deletedGroup);
         } catch (error) {
             sendErrorResponse(res, error.message ? error.message : "Fetch Failed");
         }

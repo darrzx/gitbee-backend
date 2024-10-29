@@ -19,8 +19,8 @@ model Project {
   student_leader_id   String             @db.VarChar(50)
   created_at          DateTime           @default(now())
   projectDetail       ProjectDetail? 
-  assessment         Assessment? 
-  recommendedProject  RecommendedProject? 
+  assessment          Assessment? 
+  outstandingProject  OutstandingProject? 
   projectGroups       ProjectGroup[]
   galleries           Gallery[]
   projectTechnologies ProjectTechnology[]
@@ -62,7 +62,7 @@ model Assessment {
   @@map("assessment")
 }
 
-model RecommendedProject {
+model OutstandingProject {
   id                Int             @id @default(autoincrement())
   project_id        Int             @unique
   grade             Int         
@@ -70,7 +70,7 @@ model RecommendedProject {
   created_at        DateTime        @default(now())
   project           Project         @relation(fields: [project_id], references: [id], onDelete: Cascade)
 
-  @@map("recommended_project")
+  @@map("outstanding_project")
 }
 
 model ProjectGroup {

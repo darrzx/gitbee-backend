@@ -10,23 +10,9 @@ export default class HopOutstandingProjectHandler {
     static async insertOutstandingProject(req : Request, res : Response, next : NextFunction) {
         try {
             const schema = z.object({ 
-                lecturer_id: z.string(),
-                student_leader_id: z.string(),
-                title: z.string(),
-                semester_id: z.string(),
-                course_id: z.string(),
-                class: z.string(),
-                github_link: z.string(),
-                project_link: z.string(),
-                documentation: z.string(),
-                thumbnail: z.string(),
-                description: z.string(),
-                status_id: z.number(),
-                category_id: z.number(),
-                major_id: z.number(),
-                gallery: z.array(z.string()),
-                group_members: z.array(z.string()).optional(),
-                technology_ids: z.array(z.number())
+                project_id: z.number(),
+                grade: z.number(), 
+                feedback: z.string().optional() 
             });
       
             const validationResult = validateSchema(schema, req.body);
@@ -35,8 +21,16 @@ export default class HopOutstandingProjectHandler {
             }
 
             const params = validationResult.data;
+            const insertedOutstandingProject = await prisma.outstandingProject.create({
+                data: {
+                    project_id: params.project_id,
+                    grade: params.grade,
+                    feedback: params.feedback,
+                    created_at: new Date()
+                }
+            })
         
-            // sendSuccessResponse(res, { newProject, newProjectDetail });
+            sendSuccessResponse(res, insertedOutstandingProject);
         } catch (error) {
             sendErrorResponse(res, error.message ? error.message : "Insert Project Failed");
         }

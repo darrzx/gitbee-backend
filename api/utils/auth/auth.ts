@@ -16,7 +16,7 @@ export const createToken = (
     role: string,
     messier_id?: string
     ) => {
-    const expire = Math.floor(Date.now() / 1000) + (60 * 60);
+    const expire = Math.floor(Date.now() / 1000) + (60 * 60 * 24 * 7);
     const token = jwt.sign({
         exp: expire,
         nim: nim,
@@ -28,7 +28,7 @@ export const createToken = (
     }, secret);
     return {
         token,
-        expires: addHour(1),
+        expires: addHour(168),
     }
 }
 

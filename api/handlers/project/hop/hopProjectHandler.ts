@@ -11,44 +11,35 @@ export default class HopProjectHandler {
         try {
             const schema = z.object({
                 semester_id: z.string(),
-                course_id: z.string(),
-                class: z.string()
+                course_id: z.string()
             });
-
+    
             const validationResult = validateSchema(schema, req.query);
             if (validationResult.error) {
                 return sendErrorResponse(res, validationResult.message ? validationResult.message : "Fetch Failed");
             }
-
-            const params = validationResult.data;
-
-            const classExists = await prisma.class.findFirst({
-                where: {
-                    semester_id: params.semester_id,
-                    course_id: params.course_id,
-                    class: params.class
-                }
-            });
     
-            const includeAssessment = !!classExists;
+            const params = validationResult.data;
             
             const projects = await prisma.project.findMany({
                 where: {
                     projectDetail: {
                         semester_id: params.semester_id,
-                        course_id: params.course_id,       
-                        class: params.class,               
+                        course_id: params.course_id
                     },
-                    ...(includeAssessment && { 
-                        assessment: { grade: { gte: 4 } }
-                    })
+                    assessment: { grade: { gte: 4 } }
                 },
                 include: {
                     projectDetail: true,
                     projectGroups: true,
                     galleries: true,
                     projectTechnologies: true,
-                    assessment: includeAssessment
+                    assessment: true
+                },
+                orderBy: {
+                    assessment: {
+                        grade: 'desc'
+                    }
                 }
             });
 

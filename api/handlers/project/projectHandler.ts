@@ -143,7 +143,8 @@ export default class ProjectHandler {
                 }),
                 ...(params.technologyFilter && {
                     projectTechnologies: { some: { technology_id: Number(params.technologyFilter) } }
-                })
+                }),
+                assessment: { isNot: null }
             };
 
             const projects = await prisma.project.findMany({

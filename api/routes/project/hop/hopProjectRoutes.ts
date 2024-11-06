@@ -3,6 +3,6 @@ import HopProjectHandler from "api/handlers/project/hop/hopProjectHandler";
 
 const hopProjectRoutes = express.Router();
 
-hopProjectRoutes.get("/class", HopProjectHandler.getAllClassProject);
+hopProjectRoutes.get("/all", HopProjectHandler.getAllProject);
 
 export default hopProjectRoutes;

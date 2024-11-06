@@ -12,6 +12,7 @@ export default class HopOutstandingProjectHandler {
             const schema = z.object({ 
                 project_id: z.number(),
                 grade: z.number(), 
+                is_recommended: z.boolean(),
                 feedback: z.string().optional() 
             });
       
@@ -21,16 +22,23 @@ export default class HopOutstandingProjectHandler {
             }
 
             const params = validationResult.data;
-            const insertedOutstandingProject = await prisma.outstandingProject.create({
-                data: {
-                    project_id: params.project_id,
-                    grade: params.grade,
-                    feedback: params.feedback,
-                    created_at: new Date()
-                }
-            })
+            if(params.is_recommended) {
+                await prisma.outstandingProject.create({
+                    data: {
+                        project_id: params.project_id,
+                        grade: params.grade,
+                        feedback: params.feedback,
+                        created_at: new Date()
+                    }
+                });
+            }
+
+            await prisma.projectDetail.update({
+                where: { project_id: params.project_id },
+                data: { status_id: 3 }
+            });
         
-            sendSuccessResponse(res, insertedOutstandingProject);
+            sendSuccessResponse(res, "Project Successfully Reviewed");
         } catch (error) {
             sendErrorResponse(res, error.message ? error.message : "Insert Failed");
         }

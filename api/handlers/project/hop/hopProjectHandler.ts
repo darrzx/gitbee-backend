@@ -7,7 +7,7 @@ import { PrismaClient } from "@prisma/client";
 const prisma = new PrismaClient();
 
 export default class HopProjectHandler {
-    static async getAllClassProject(req : Request, res : Response, next : NextFunction) {
+    static async getAllProject(req : Request, res : Response, next : NextFunction) {
         try {
             const schema = z.object({
                 semester_id: z.string(),

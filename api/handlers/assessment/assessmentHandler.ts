@@ -28,28 +28,58 @@ export default class AssessmentHandler {
     
             const params = validationResult.data;
     
-            const insertedAssessments = await prisma.$transaction(
-                params.assessments.map((assessment) => prisma.assessment.create({
-                    data: {
-                        project_id: Number(assessment.project_id),
-                        grade: assessment.grade,
-                        reason: assessment.reason ?? "",
-                        created_at: new Date()
-                    }
-                }))
-            );
+            // const insertedAssessments = await prisma.$transaction(
+            //     params.assessments.map((assessment) => prisma.assessment.create({
+            //         data: {
+            //             project_id: Number(assessment.project_id),
+            //             grade: assessment.grade,
+            //             reason: assessment.reason ?? "",
+            //             created_at: new Date()
+            //         }
+            //     }))
+            // );
 
-            const finalizeClass = await prisma.class.create({
-                data: {
-                    semester_id: params.semester_id, 
-                    course_id: params.course_id, 
-                    class: params.class, 
-                    lecturer_id: params.lecturer_id,
-                    finalized_at: new Date()
-                }
-            });
+            // const finalizeClass = await prisma.class.create({
+            //     data: {
+            //         semester_id: params.semester_id, 
+            //         course_id: params.course_id, 
+            //         class: params.class, 
+            //         lecturer_id: params.lecturer_id,
+            //         finalized_at: new Date()
+            //     }
+            // });
+
+            const insertedAssessments = await prisma.$transaction([
+                ...params.assessments.map((assessment) =>
+                    prisma.assessment.create({
+                        data: {
+                            project_id: Number(assessment.project_id),
+                            grade: assessment.grade,
+                            reason: assessment.reason ?? "",
+                            created_at: new Date()
+                        }
+                    })
+                ),
     
-            sendSuccessResponse(res, { insertedAssessments, finalizeClass });
+                ...params.assessments.map((assessment) =>
+                    prisma.projectDetail.update({
+                        where: { project_id: Number(assessment.project_id) },
+                        data: { status_id: 2 }
+                    })
+                ),
+    
+                prisma.class.create({
+                    data: {
+                        semester_id: params.semester_id,
+                        course_id: params.course_id,
+                        class: params.class,
+                        lecturer_id: params.lecturer_id,
+                        finalized_at: new Date()
+                    }
+                })
+            ]);
+    
+            sendSuccessResponse(res, insertedAssessments);
         } catch (error) {
             sendErrorResponse(res, error.message ? error.message : "Insert Failed");
         }

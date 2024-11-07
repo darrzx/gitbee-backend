@@ -7,6 +7,7 @@ const projectRoutes = express.Router();
 
 projectRoutes.post("/insert", ProjectHandler.insertProject);
 projectRoutes.get("/all", ProjectHandler.getAllProject);
+projectRoutes.get("/detail", ProjectHandler.getDetailProject);
 
 projectRoutes.use("/hop", hopProjectRoutes);
 projectRoutes.use("/lecturer", lecturerProjectRoutes);

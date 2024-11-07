@@ -8,10 +8,12 @@ const prisma = new PrismaClient();
 
 export default class HopProjectHandler {
     static async getAllProject(req : Request, res : Response, next : NextFunction) {
+        // status bedaiin antara 2 dan 3, filter otomatis berdasarkan major, semester otomatis ke current
         try {
             const schema = z.object({
-                semester_id: z.string(),
-                course_id: z.string()
+                major_id: z.string(),
+                semester_id: z.string().optional(),
+                status_id: z.string().optional()
             });
     
             const validationResult = validateSchema(schema, req.query);
@@ -25,9 +27,10 @@ export default class HopProjectHandler {
                 where: {
                     projectDetail: {
                         semester_id: params.semester_id,
-                        course_id: params.course_id
+                        major_id: Number(params.major_id),
+                        ...(params.status_id && { status_id: Number(params.status_id) })
                     },
-                    assessment: { grade: { gte: 4 } }
+                    assessment: { grade: { gte: 4 } } 
                 },
                 include: {
                     projectDetail: true,

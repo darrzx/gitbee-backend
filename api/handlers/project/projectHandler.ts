@@ -40,7 +40,8 @@ export default class ProjectHandler {
             const newProject = await prisma.project.create({
                 data: {
                   lecturer_id: params.lecturer_id,
-                  student_leader_id: params.student_leader_id
+                  student_leader_id: params.student_leader_id,
+                  is_disable: 0
                 },
             });
 
@@ -127,6 +128,7 @@ export default class ProjectHandler {
 
             const params = validationResult.data;
             const whereCondition = {
+                is_disable: 0,
                 ...(params.search && {
                     OR: [
                         { projectDetail: { title: { contains: params.search } } },

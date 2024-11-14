@@ -17,6 +17,7 @@ model Project {
   id                  Int                @id @default(autoincrement())
   lecturer_id         String             @db.VarChar(50)
   student_leader_id   String             @db.VarChar(50)
+  is_disable          Int
   created_at          DateTime           @default(now())
   projectDetail       ProjectDetail? 
   assessment          Assessment? 

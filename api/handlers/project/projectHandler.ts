@@ -112,13 +112,15 @@ export default class ProjectHandler {
         }
     }
 
+    // semester belum ke filter
     static async getAllProject(req : Request, res : Response, next : NextFunction) {
         try {
             const schema = z.object({
                 search: z.string().optional(),
                 categoryFilter: z.string().optional(),
                 majorFilter: z.string().optional(),
-                technologyFilter: z.string().optional()
+                technologyFilter: z.string().optional(),
+                semester_id: z.string().optional()
             });
 
             const validationResult = validateSchema(schema, req.query);

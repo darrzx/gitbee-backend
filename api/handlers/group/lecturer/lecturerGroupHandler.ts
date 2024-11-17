@@ -56,7 +56,7 @@ export default class LecturerGroupHandler {
         }
     }
 
-    static async cancelTemporaryGroup(req : Request, res : Response, next : NextFunction) {
+    static async removeTemporaryGroup(req : Request, res : Response, next : NextFunction) {
         try {
             const schema = z.object({
                 semester_id: z.string(),

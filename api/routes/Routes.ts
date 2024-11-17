@@ -10,6 +10,7 @@ import userRoutes from "./user/userRoutes";
 import groupRoutes from "./group/groupRoutes";
 import assessmentRoutes from "./assessment/assessmentRoutes";
 import outstandingProjectRoutes from "./outstandingProject/outstandingProjectRoutes";
+import classRoutes from "./class/classRoutes";
 
 const routes = express.Router();
 
@@ -23,6 +24,7 @@ routes.get("/", (req, res) => {
 routes.use("/auth", authRoutes);
 routes.use("/user", userRoutes);
 routes.use("/semester", semesterRoutes);
+routes.use("/class", classRoutes);
 routes.use("/outstanding-project", outstandingProjectRoutes);
 routes.use("/project", projectRoutes);
 routes.use("/status", statusRoutes);

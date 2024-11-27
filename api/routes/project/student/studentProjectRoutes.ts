@@ -3,6 +3,7 @@ import StudentProjectHandler from "api/handlers/project/student/studentProjectHa
 
 const studentProjectRoutes = express.Router();
 
-studentProjectRoutes.get("/history", StudentProjectHandler.getStudentProject);
+studentProjectRoutes.get("/history", StudentProjectHandler.getStudentClassProject);
+studentProjectRoutes.get("/all", StudentProjectHandler.getAllStudentProject);
 
 export default studentProjectRoutes;

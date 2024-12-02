@@ -86,4 +86,81 @@ export default class LecturerProjectHandler {
             sendErrorResponse(res, error.message ? error.message : "Fetch Failed");
         }
     }
+
+    static async getAllOutstandingProject(req : Request, res : Response, next : NextFunction) {
+        try {
+            const schema = z.object({
+                semester_id: z.string().optional(),
+                search: z.string().optional()
+            });
+
+            const validationResult = validateSchema(schema, req.query);
+            if (validationResult.error) {
+                return sendErrorResponse(res, validationResult.message ? validationResult.message : "Fetch Failed");
+            }
+
+            const params = validationResult.data;
+            const whereCondition = {
+                ...(params.search && {
+                    OR: [
+                        { projectDetail: { title: { contains: params.search } } },
+                        { projectDetail: { course_id: { contains: params.search } } },
+                        { projectDetail: { class: { contains: params.search } } } 
+                    ]
+                }),
+                assessment: { isNot: null }
+            };
+            
+            const projects = await prisma.project.findMany({
+                where: whereCondition,
+                include: {
+                    projectDetail: true,
+                    projectGroups: true,
+                    galleries: true,
+                    projectTechnologies: true,
+                    assessment: true
+                }
+            });
+
+            const filteredProjects = projects.filter((project) => {
+                return project.assessment?.grade !== undefined && project.assessment.grade >= 4;
+            });
+
+            const updatedProjects = await Promise.all(filteredProjects.map(async (project) => {
+                const updatedProjectGroups = project.projectGroups.map(group => {
+                    const { id, project_id, ...otherAttributes } = group;
+                    return otherAttributes;
+                });
+    
+                const updatedGalleries = project.galleries.map(gallery => {
+                    const { id, project_id, ...otherAttributes } = gallery;
+                    return otherAttributes;
+                });
+
+                const updatedProjectTechnologies = await Promise.all(
+                    project.projectTechnologies.map(async (technology) => {
+                        const technologyDetails = await prisma.technology.findUnique({
+                            where: { id: technology.technology_id }
+                        });
+                        const { id, project_id, ...otherAttributes } = technology;
+                        return {
+                            ...otherAttributes,
+                            technology_name: technologyDetails.name
+                        };
+                    })
+                );
+    
+                return {
+                    ...project,
+                    projectGroups: updatedProjectGroups,
+                    galleries: updatedGalleries,
+                    projectTechnologies: updatedProjectTechnologies
+                };
+            }));
+
+            sendSuccessResponse(res, updatedProjects);
+        } catch (error) {
+            sendErrorResponse(res, error.message ? error.message : "Fetch Failed");
+        }
+    }
 }

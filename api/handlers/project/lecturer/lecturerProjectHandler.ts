@@ -108,6 +108,9 @@ export default class LecturerProjectHandler {
                         { projectDetail: { class: { contains: params.search } } } 
                     ]
                 }),
+                ...(params.semester_id && {
+                    projectDetail: { semester_id: params.semester_id }
+                }),
                 assessment: { isNot: null }
             };
             

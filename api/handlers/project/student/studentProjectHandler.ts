@@ -119,7 +119,10 @@ export default class StudentProjectHandler {
                     projectGroups: true,
                     galleries: true,
                     projectTechnologies: true,
-                    assessment: true // Include assessment data directly
+                    assessment: true 
+                },
+                orderBy: {
+                    created_at: "desc"
                 }
             });
     

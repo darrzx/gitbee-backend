@@ -37,6 +37,33 @@ export default class ProjectHandler {
 
             const params = validationResult.data;
 
+            const existingProject = await prisma.project.findFirst({
+                where: {
+                    lecturer_id: params.lecturer_id,
+                    student_leader_id: params.student_leader_id,
+                    projectDetail: {
+                        course_id: params.course_id,
+                        semester_id: params.semester_id,
+                        class: params.class
+                    }
+                },
+                include: {
+                    projectDetail: true
+                }
+            });
+
+            if (existingProject) {
+                const projectId = existingProject.id;
+    
+                await prisma.$transaction([
+                    prisma.gallery.deleteMany({ where: { project_id: projectId } }),
+                    prisma.projectTechnology.deleteMany({ where: { project_id: projectId } }),
+                    prisma.projectGroup.deleteMany({ where: { project_id: projectId } }),
+                    prisma.projectDetail.delete({ where: { project_id: projectId } }),
+                    prisma.project.delete({ where: { id: projectId } })
+                ]);
+            }
+
             const newProject = await prisma.project.create({
                 data: {
                   lecturer_id: params.lecturer_id,

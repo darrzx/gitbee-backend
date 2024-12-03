@@ -45,7 +45,7 @@ export default class AuthHandler {
             );
 
             return sendSuccessResponse(res, {
-                UserName: nim,
+                nim: nim,
                 BinusianId: username,
                 Name: name.toUpperCase(),
                 Email: email.toLowerCase(),

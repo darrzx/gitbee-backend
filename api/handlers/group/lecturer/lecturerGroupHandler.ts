@@ -56,6 +56,36 @@ export default class LecturerGroupHandler {
         }
     }
 
+    static async getClassList(req : Request, res : Response, next : NextFunction) {
+        try {
+            const schema = z.object({
+                semester_id: z.string(),
+                course_id: z.string(),
+                class: z.string()
+            });
+    
+            const validationResult = validateSchema(schema, req.query);
+            if (validationResult.error) {
+                return sendErrorResponse(res, validationResult.message ? validationResult.message : "Invalid Parameters");
+            }
+    
+            const params = validationResult.data;
+            const whereCondition = {
+                semester_id: params.semester_id,
+                course_id: params.course_id,
+                class: params.class
+            };
+    
+            const studentGroup = await prisma.temporaryGroup.findMany({
+                where: whereCondition
+            });
+    
+            sendSuccessResponse(res, studentGroup);
+        } catch (error) {
+            sendErrorResponse(res, error.message ? error.message : "Fetch Failed");
+        }
+    }
+
     static async removeTemporaryGroup(req : Request, res : Response, next : NextFunction) {
         try {
             const schema = z.object({

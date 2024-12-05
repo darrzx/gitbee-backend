@@ -27,7 +27,8 @@ export default class ProjectHandler {
                 major_id: z.number(),
                 gallery: z.array(z.string()),
                 group_members: z.array(z.string()).optional(),
-                technology_ids: z.array(z.number())
+                technology_ids: z.array(z.number()),
+                group: z.number()
             });
       
             const validationResult = validateSchema(schema, req.body);
@@ -86,7 +87,8 @@ export default class ProjectHandler {
                   description: params.description,
                   status_id: params.status_id,
                   category_id: params.category_id,
-                  major_id: params.major_id
+                  major_id: params.major_id,
+                  group: params.group
                 },
             });
 
@@ -132,6 +134,17 @@ export default class ProjectHandler {
                     data: newProjectGroup
                 });
             }
+
+            const whereCondition = {
+                semester_id: params.semester_id,
+                course_id: params.course_id,
+                class: params.class,
+                group: Number(params.group)
+            };
+    
+            const deletedTemporaryGroup = await prisma.temporaryGroup.deleteMany({
+                where: whereCondition
+            });
         
             sendSuccessResponse(res, { newProject, newProjectDetail });
         } catch (error) {

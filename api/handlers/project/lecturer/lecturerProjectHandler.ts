@@ -81,7 +81,34 @@ export default class LecturerProjectHandler {
                 };
             }));
 
-            sendSuccessResponse(res, updatedProjects);
+            const studentGroup = await prisma.temporaryGroup.findMany({
+                where: {
+                    semester_id: params.semester_id,
+                    course_id: params.course_id,
+                    class: params.class
+                }
+            });
+    
+            const groupedData = studentGroup.reduce((acc: any, current: any) => {
+                const groupName = current.group;
+
+                if (!acc[groupName]) {
+                    acc[groupName] = [];
+                }
+    
+                acc[groupName].push(current);
+    
+                return acc;
+            }, {});
+    
+            const sortedGroups = Object.keys(groupedData)
+                .sort((a, b) => Number(a) - Number(b))
+                .map(name => ({
+                    group: Number(name),
+                    students: groupedData[name]
+                }));
+
+            sendSuccessResponse(res, {updatedProjects, sortedGroups});
         } catch (error) {
             sendErrorResponse(res, error.message ? error.message : "Fetch Failed");
         }

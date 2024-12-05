@@ -44,6 +44,7 @@ model ProjectDetail {
   status_id         Int
   category_id       Int
   major_id          Int
+  group             Int
   project           Project         @relation(fields: [project_id], references: [id], onDelete: Cascade)
   status            Status          @relation(fields: [status_id], references: [id], onDelete: Cascade)
   category          Category        @relation(fields: [category_id], references: [id], onDelete: Cascade)

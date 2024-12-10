@@ -92,7 +92,7 @@ export default class LecturerGroupHandler {
                 semester_id: z.string(),
                 course_id: z.string(),
                 class: z.string(),
-                group: z.string()
+                group: z.number()
             });
     
             const validationResult = validateSchema(schema, req.body);
@@ -105,7 +105,7 @@ export default class LecturerGroupHandler {
                 semester_id: params.semester_id,
                 course_id: params.course_id,
                 class: params.class,
-                group: Number(params.group)
+                group: params.group
             };
     
             const deletedGroup = await prisma.temporaryGroup.deleteMany({

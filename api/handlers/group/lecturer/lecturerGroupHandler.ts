@@ -95,7 +95,7 @@ export default class LecturerGroupHandler {
                 group: z.string()
             });
     
-            const validationResult = validateSchema(schema, req.query);
+            const validationResult = validateSchema(schema, req.body);
             if (validationResult.error) {
                 return sendErrorResponse(res, validationResult.message ? validationResult.message : "Invalid Parameters");
             }

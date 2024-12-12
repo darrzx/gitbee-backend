@@ -25,22 +25,52 @@ export default class StudentGroupHandler {
             const params = validationResult.data;
             const studentIds = Array.isArray(params.student_ids) ? params.student_ids : [params.student_ids];
 
-            const maxName = await prisma.temporaryGroup.findFirst({
+            const existingTemporaryGroups = await prisma.temporaryGroup.findMany({
                 where: {
                     semester_id: params.semester_id,
                     course_id: params.course_id,
                     class: params.class
                 },
                 orderBy: {
-                    group: 'desc'
+                    group: 'asc'
                 },
                 select: {
                     group: true
+                },
+                distinct: ['group']
+            });
+            console.log(existingTemporaryGroups)
+
+            const existingGroupsInProject = await prisma.projectDetail.findMany({
+                where: {
+                  semester_id: params.semester_id,
+                  course_id: params.course_id,
+                  class: params.class,
+                },
+                orderBy: {
+                    group: 'asc'
+                },
+                select: {
+                  group: true,
                 }
             });
-    
-            const nextName = maxName ? maxName.group + 1 : 1;
-    
+            console.log(existingGroupsInProject)
+
+            const combinedGroups = existingTemporaryGroups.concat(existingGroupsInProject);
+            combinedGroups.sort((a, b) => a.group - b.group);
+            console.log(combinedGroups);
+            
+            let currentProjectGroupIndex = 1;
+
+            for (const temporaryGroup of combinedGroups) {
+                if(temporaryGroup.group == currentProjectGroupIndex) {
+                    currentProjectGroupIndex++;
+                } else {
+                    break;
+                }
+            }
+            console.log("next group: " + currentProjectGroupIndex);
+        
             const insertedGroups = await Promise.all(studentIds.map(async (student_id) => {
                 const nameResponse = await GenericService.getName(student_id);
                 const student_name = nameResponse.data ?? student_id;
@@ -53,7 +83,7 @@ export default class StudentGroupHandler {
                         semester_id: params.semester_id,
                         course_id: params.course_id,
                         class: params.class,
-                        group: nextName,
+                        group: currentProjectGroupIndex,
                         student_id,
                         student_name,
                         student_binusian_id

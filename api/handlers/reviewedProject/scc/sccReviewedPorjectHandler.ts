@@ -6,8 +6,8 @@ import { PrismaClient } from "@prisma/client";
 
 const prisma = new PrismaClient();
 
-export default class HopOutstandingProjectHandler { 
-    static async insertOutstandingProject(req : Request, res : Response, next : NextFunction) {
+export default class SccReviewedProjectHandler { 
+    static async insertReviewedProject(req : Request, res : Response, next : NextFunction) {
         try {
             const schema = z.object({ 
                 project_id: z.number(),
@@ -44,7 +44,7 @@ export default class HopOutstandingProjectHandler {
         }
     }
 
-    static async removeOutstandingProject(req : Request, res : Response, next : NextFunction) {
+    static async removeReviewedProject(req : Request, res : Response, next : NextFunction) {
         try {
             const schema = z.object({
                 project_id: z.string()

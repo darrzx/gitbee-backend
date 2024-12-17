@@ -6,8 +6,8 @@ import { PrismaClient } from "@prisma/client";
 
 const prisma = new PrismaClient();
 
-export default class OutstandingProjectHandler { 
-    static async getAllOutstandingProject(req : Request, res : Response, next : NextFunction) {
+export default class ReviewedProjectHandler { 
+    static async getAllReviewedProject(req : Request, res : Response, next : NextFunction) {
         try {
             const outstandingProjects = await prisma.outstandingProject.findMany({
                 include: {

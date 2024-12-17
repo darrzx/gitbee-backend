@@ -11,6 +11,7 @@ import groupRoutes from "./group/groupRoutes";
 import assessmentRoutes from "./assessment/assessmentRoutes";
 import classRoutes from "./class/classRoutes";
 import reviewedProjectRoutes from "./reviewedProject/reviewedProjectRoutes";
+import outstandingProjectRoutes from "./outstandingProject/outstandingProjectRoutes";
 
 const routes = express.Router();
 
@@ -26,6 +27,7 @@ routes.use("/user", userRoutes);
 routes.use("/semester", semesterRoutes);
 routes.use("/class", classRoutes);
 routes.use("/reviewed-project", reviewedProjectRoutes);
+routes.use("/outstanding-project", outstandingProjectRoutes);
 routes.use("/project", projectRoutes);
 routes.use("/status", statusRoutes);
 routes.use("/category", categoryRoutes);

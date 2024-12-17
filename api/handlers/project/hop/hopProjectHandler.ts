@@ -7,13 +7,12 @@ import { formatProjects } from "api/utils/formatter/formatterProject";
 
 const prisma = new PrismaClient();
 
-export default class SccProjectHandler {
+export default class HopProjectHandler {
     static async getAllProject(req: Request, res: Response, next: NextFunction) {
         try {
             const schema = z.object({
                 major_id: z.string(),
-                semester_id: z.string(),
-                course_id: z.string()
+                semester_id: z.string()
             });
     
             const validationResult = validateSchema(schema, req.query);
@@ -29,8 +28,7 @@ export default class SccProjectHandler {
                         projectDetail: {
                             semester_id: params.semester_id,
                             major_id: Number(params.major_id),
-                            course_id: params.course_id,
-                            status_id: 3
+                            status_id: 4
                         }
                     },
                     include: {
@@ -51,10 +49,9 @@ export default class SccProjectHandler {
                         projectDetail: {
                             semester_id: params.semester_id,
                             major_id: Number(params.major_id),
-                            course_id: params.course_id,
-                            status_id: 2
+                            status_id: 3
                         },
-                        assessment: { grade: { gte: 4 } }
+                        reviewedProject: { is_recommended: 1 }
                     },
                     include: {
                         projectDetail: true,

@@ -21,7 +21,8 @@ model Project {
   created_at          DateTime           @default(now())
   projectDetail       ProjectDetail? 
   assessment          Assessment? 
-  ReviewedProject     ReviewedProject? 
+  reviewedProject     ReviewedProject? 
+  outstandingProject  OutstandingProject?
   projectGroups       ProjectGroup[]
   galleries           Gallery[]
   projectTechnologies ProjectTechnology[]
@@ -73,6 +74,17 @@ model ReviewedProject {
   project           Project         @relation(fields: [project_id], references: [id], onDelete: Cascade)
 
   @@map("reviewed_project")
+}
+
+model OutstandingProject {
+  id                Int             @id @default(autoincrement())
+  project_id        Int             @unique
+  is_outstanding    Int         
+  feedback          String          @db.Text
+  created_at        DateTime        @default(now())
+  project           Project         @relation(fields: [project_id], references: [id], onDelete: Cascade)
+
+  @@map("outstanding_project")
 }
 
 model ProjectGroup {

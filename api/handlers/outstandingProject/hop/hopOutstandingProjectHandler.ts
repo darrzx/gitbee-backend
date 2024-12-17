@@ -6,12 +6,12 @@ import { PrismaClient } from "@prisma/client";
 
 const prisma = new PrismaClient();
 
-export default class SccReviewedProjectHandler { 
-    static async insertReviewedProject(req : Request, res : Response, next : NextFunction) {
+export default class HopOutstandingProjectHandler { 
+    static async insertOutstandingProject(req : Request, res : Response, next : NextFunction) {
         try {
             const schema = z.object({ 
                 project_id: z.number(),
-                is_recommended: z.number(),
+                is_outstanding: z.number(),
                 feedback: z.string().optional() 
             });
       
@@ -21,11 +21,11 @@ export default class SccReviewedProjectHandler {
             }
 
             const params = validationResult.data;
-            if(params.is_recommended == 1) {
-                await prisma.reviewedProject.create({
+            if(params.is_outstanding == 1) {
+                await prisma.outstandingProject.create({
                     data: {
                         project_id: params.project_id,
-                        is_recommended: params.is_recommended,
+                        is_outstanding: params.is_outstanding,
                         feedback: params.feedback,
                         created_at: new Date()
                     }
@@ -34,16 +34,16 @@ export default class SccReviewedProjectHandler {
 
             await prisma.projectDetail.update({
                 where: { project_id: params.project_id },
-                data: { status_id: 3 }
+                data: { status_id: 4 }
             });
         
-            sendSuccessResponse(res, "Project Successfully Reviewed");
+            sendSuccessResponse(res, "Project Successfully Finalized");
         } catch (error) {
             sendErrorResponse(res, error.message ? error.message : "Insert Failed");
         }
     }
 
-    static async removeReviewedProject(req : Request, res : Response, next : NextFunction) {
+    static async removeOutstandingProject(req : Request, res : Response, next : NextFunction) {
         try {
             const schema = z.object({
                 project_id: z.string()
@@ -59,7 +59,7 @@ export default class SccReviewedProjectHandler {
                 project_id: Number(params.project_id)
             };
     
-            const deletedReviewedProject = await prisma.reviewedProject.delete({
+            const deletedReviewedProject = await prisma.outstandingProject.delete({
                 where: whereCondition
             });
     

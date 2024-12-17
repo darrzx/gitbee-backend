@@ -5,10 +5,10 @@ import { PrismaClient } from "@prisma/client";
 
 const prisma = new PrismaClient();
 
-export default class ReviewedProjectHandler { 
-    static async getAllReviewedProject(req : Request, res : Response, next : NextFunction) {
+export default class OutstandingProjectHandler { 
+    static async getAllOutstandingProject(req : Request, res : Response, next : NextFunction) {
         try {
-            const reviewedProjects = await prisma.reviewedProject.findMany({
+            const outstandingProjects = await prisma.outstandingProject.findMany({
                 include: {
                     project: {
                         include: {
@@ -21,10 +21,10 @@ export default class ReviewedProjectHandler {
                 }
             });
 
-            const updatedReviewedProjects = await Promise.all(reviewedProjects.map(async (reviewedProject) => {
-                const { project_id, ...updatedReviewedProjects } = reviewedProject;
+            const updatedOutstandingProjects = await Promise.all(outstandingProjects.map(async (outstandingProject) => {
+                const { project_id, ...updatedOutstandingProjects } = outstandingProject;
 
-                const project = reviewedProject.project;
+                const project = outstandingProject.project;
                 const { created_at, ...updatedProject } = project;
     
                 const updatedProjectGroups = project.projectGroups.map(group => {
@@ -51,7 +51,7 @@ export default class ReviewedProjectHandler {
                 );
     
                 return {
-                    ...updatedReviewedProjects,
+                    ...updatedOutstandingProjects,
                     project: {
                         ...updatedProject,
                         projectGroups: updatedProjectGroups,
@@ -61,7 +61,7 @@ export default class ReviewedProjectHandler {
                 };
             }));
     
-            sendSuccessResponse(res, updatedReviewedProjects);
+            sendSuccessResponse(res, updatedOutstandingProjects);
         } catch (error) {
             sendErrorResponse(res, error.message ? error.message : "Fetch Failed");
         }

@@ -4,6 +4,6 @@ import LecturerProjectHandler from "api/handlers/project/lecturer/lecturerProjec
 const lecturerProjectRoutes = express.Router();
 
 lecturerProjectRoutes.get("/class", LecturerProjectHandler.getAllClassProject);
-lecturerProjectRoutes.get("/all-outstanding", LecturerProjectHandler.getAllOutstandingProject);
+lecturerProjectRoutes.get("/all-reviewed", LecturerProjectHandler.getAllReviewedProject);
 
 export default lecturerProjectRoutes;

@@ -9,7 +9,7 @@ const prisma = new PrismaClient();
 export default class ReviewedProjectHandler { 
     static async getAllReviewedProject(req : Request, res : Response, next : NextFunction) {
         try {
-            const outstandingProjects = await prisma.outstandingProject.findMany({
+            const reviewedProjects = await prisma.reviewedProject.findMany({
                 include: {
                     project: {
                         include: {
@@ -22,10 +22,10 @@ export default class ReviewedProjectHandler {
                 }
             });
 
-            const updatedOutstandingProjects = await Promise.all(outstandingProjects.map(async (outstandingProject) => {
-                const { project_id, ...updatedOutstandingProject } = outstandingProject;
+            const updatedReviewedProjects = await Promise.all(reviewedProjects.map(async (reviewedProject) => {
+                const { project_id, ...updatedReviewedProjects } = reviewedProject;
 
-                const project = outstandingProject.project;
+                const project = reviewedProject.project;
                 const { created_at, ...updatedProject } = project;
     
                 const updatedProjectGroups = project.projectGroups.map(group => {
@@ -52,7 +52,7 @@ export default class ReviewedProjectHandler {
                 );
     
                 return {
-                    ...updatedOutstandingProject,
+                    ...updatedReviewedProjects,
                     project: {
                         ...updatedProject,
                         projectGroups: updatedProjectGroups,
@@ -62,7 +62,7 @@ export default class ReviewedProjectHandler {
                 };
             }));
     
-            sendSuccessResponse(res, updatedOutstandingProjects);
+            sendSuccessResponse(res, updatedReviewedProjects);
         } catch (error) {
             sendErrorResponse(res, error.message ? error.message : "Fetch Failed");
         }

@@ -23,7 +23,7 @@ export default class SccReviewedProjectHandler {
 
             const params = validationResult.data;
             if(params.is_recommended) {
-                await prisma.outstandingProject.create({
+                await prisma.reviewedProject.create({
                     data: {
                         project_id: params.project_id,
                         grade: params.grade,
@@ -60,11 +60,11 @@ export default class SccReviewedProjectHandler {
                 project_id: Number(params.project_id)
             };
     
-            const deletedOutstandingProject = await prisma.outstandingProject.delete({
+            const deletedReviewedProject = await prisma.reviewedProject.delete({
                 where: whereCondition
             });
     
-            sendSuccessResponse(res, deletedOutstandingProject);
+            sendSuccessResponse(res, deletedReviewedProject);
         } catch (error) {
             sendErrorResponse(res, error.message ? error.message : "Delete Failed");
         }

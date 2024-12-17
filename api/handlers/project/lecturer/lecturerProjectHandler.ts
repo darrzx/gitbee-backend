@@ -114,7 +114,7 @@ export default class LecturerProjectHandler {
         }
     }
 
-    static async getAllOutstandingProject(req : Request, res : Response, next : NextFunction) {
+    static async getAllReviewedProject(req : Request, res : Response, next : NextFunction) {
         try {
             const schema = z.object({
                 semester_id: z.string().optional(),

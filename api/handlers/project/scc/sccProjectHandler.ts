@@ -29,8 +29,7 @@ export default class SccProjectHandler {
                             semester_id: params.semester_id,
                             major_id: Number(params.major_id),
                             status_id: 3
-                        },
-                        assessment: { grade: { gte: 4 } }
+                        }
                     },
                     include: {
                         projectDetail: true,

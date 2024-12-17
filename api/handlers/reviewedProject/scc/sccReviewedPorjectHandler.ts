@@ -11,8 +11,7 @@ export default class SccReviewedProjectHandler {
         try {
             const schema = z.object({ 
                 project_id: z.number(),
-                grade: z.number(), 
-                is_recommended: z.boolean(),
+                is_recommended: z.number(),
                 feedback: z.string().optional() 
             });
       
@@ -26,7 +25,7 @@ export default class SccReviewedProjectHandler {
                 await prisma.reviewedProject.create({
                     data: {
                         project_id: params.project_id,
-                        grade: params.grade,
+                        is_recommended: params.is_recommended,
                         feedback: params.feedback,
                         created_at: new Date()
                     }

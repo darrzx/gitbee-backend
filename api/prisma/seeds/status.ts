@@ -1,5 +1,6 @@
 export const statuses = [
     "Submitted",
     "Graded",
-    "Reviewed"
+    "Reviewed",
+    "Finalized"
 ].map(name => ({ name }));

@@ -4,6 +4,9 @@ import type { Request, Response } from "express";
 import { createToken } from "api/utils/auth/auth";
 import { sendSuccessResponse, sendErrorResponse } from "api/utils/response/response";
 import GenericService from "api/services/generic/genericService";
+import { PrismaClient } from "@prisma/client";
+
+const prisma = new PrismaClient();
 
 export default class AuthHandler {
     static async login(req: Request, res: Response) {
@@ -32,9 +35,18 @@ export default class AuthHandler {
                 return sendErrorResponse(res, "Failed to fetch Binusian data", 401);
             }
 
-            const username = atlantis.data.BinusianID ?? "BN124298983";
+            const username = atlantis.data.BinusianID ?? "";
             const nim = atlantis.data.NIM ?? "";
-            const role = atlantis.data.KodeDosen ? "Lecturer" : "Student";
+
+            const isAdmin = await prisma.user.findFirst({
+                where: {
+                    email: email,
+                },
+                select: {
+                    email: true,
+                },
+            });
+            const role = isAdmin ? "Admin" : atlantis.data.KodeDosen ? "Lecturer" : "Student";
 
             const token = createToken(
                 nim,

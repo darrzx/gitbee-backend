@@ -41,7 +41,11 @@ export default class ProjectHandler {
             const existingProject = await prisma.project.findFirst({
                 where: {
                     lecturer_id: params.lecturer_id,
-                    student_leader_id: params.student_leader_id,
+                    projectGroups: {
+                        some: {
+                            student_id: params.student_leader_id,
+                        },
+                    },
                     projectDetail: {
                         course_id: params.course_id,
                         semester_id: params.semester_id,
@@ -49,7 +53,8 @@ export default class ProjectHandler {
                     }
                 },
                 include: {
-                    projectDetail: true
+                    projectDetail: true,
+                    projectGroups: true
                 }
             });
 

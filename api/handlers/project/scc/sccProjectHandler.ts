@@ -38,7 +38,8 @@ export default class SccProjectHandler {
                         projectGroups: true,
                         galleries: true,
                         projectTechnologies: true,
-                        assessment: true
+                        assessment: true,
+                        reviewedProject: true
                     },
                     orderBy: {
                         assessment: {

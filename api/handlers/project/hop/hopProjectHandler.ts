@@ -36,7 +36,8 @@ export default class HopProjectHandler {
                         projectGroups: true,
                         galleries: true,
                         projectTechnologies: true,
-                        assessment: true
+                        assessment: true,
+                        outstandingProject: true
                     },
                     orderBy: {
                         assessment: {

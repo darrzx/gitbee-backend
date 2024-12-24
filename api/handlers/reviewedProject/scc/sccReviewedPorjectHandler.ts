@@ -21,7 +21,7 @@ export default class SccReviewedProjectHandler {
             }
 
             const params = validationResult.data;
-            if(params.is_recommended == 1) {
+            if(params.is_recommended == 1 || params.is_recommended == 0) {
                 await prisma.reviewedProject.create({
                     data: {
                         project_id: params.project_id,

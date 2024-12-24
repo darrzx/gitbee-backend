@@ -9,6 +9,9 @@ export default class OutstandingProjectHandler {
     static async getAllOutstandingProject(req : Request, res : Response, next : NextFunction) {
         try {
             const outstandingProjects = await prisma.outstandingProject.findMany({
+                where: {
+                    is_outstanding: 1
+                },
                 include: {
                     project: {
                         include: {

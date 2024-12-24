@@ -9,6 +9,9 @@ export default class ReviewedProjectHandler {
     static async getAllReviewedProject(req : Request, res : Response, next : NextFunction) {
         try {
             const reviewedProjects = await prisma.reviewedProject.findMany({
+                where: {
+                    is_recommended: 1
+                },
                 include: {
                     project: {
                         include: {

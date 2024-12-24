@@ -21,7 +21,7 @@ export default class HopOutstandingProjectHandler {
             }
 
             const params = validationResult.data;
-            if(params.is_outstanding == 1) {
+            if(params.is_outstanding == 1 || params.is_outstanding == 0) {
                 await prisma.outstandingProject.create({
                     data: {
                         project_id: params.project_id,

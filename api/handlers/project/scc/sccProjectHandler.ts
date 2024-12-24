@@ -13,7 +13,8 @@ export default class SccProjectHandler {
             const schema = z.object({
                 major_id: z.string(),
                 semester_id: z.string(),
-                course_id: z.string()
+                course_id: z.string(),
+                search: z.string().optional()
             });
     
             const validationResult = validateSchema(schema, req.query);
@@ -30,7 +31,8 @@ export default class SccProjectHandler {
                             semester_id: params.semester_id,
                             major_id: Number(params.major_id),
                             course_id: params.course_id,
-                            status_id: 3
+                            status_id: 3,
+                            title: params.search
                         }
                     },
                     include: {
@@ -53,7 +55,8 @@ export default class SccProjectHandler {
                             semester_id: params.semester_id,
                             major_id: Number(params.major_id),
                             course_id: params.course_id,
-                            status_id: 2
+                            status_id: 2,
+                            title: params.search
                         },
                         assessment: { grade: { gte: 4 } }
                     },

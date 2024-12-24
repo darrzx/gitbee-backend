@@ -12,7 +12,8 @@ export default class HopProjectHandler {
         try {
             const schema = z.object({
                 major_id: z.string(),
-                semester_id: z.string()
+                semester_id: z.string(),
+                search: z.string().optional()
             });
     
             const validationResult = validateSchema(schema, req.query);
@@ -28,7 +29,8 @@ export default class HopProjectHandler {
                         projectDetail: {
                             semester_id: params.semester_id,
                             major_id: Number(params.major_id),
-                            status_id: 4
+                            status_id: 4,
+                            title: params.search
                         }
                     },
                     include: {
@@ -50,7 +52,8 @@ export default class HopProjectHandler {
                         projectDetail: {
                             semester_id: params.semester_id,
                             major_id: Number(params.major_id),
-                            status_id: 3
+                            status_id: 3,
+                            title: params.search
                         },
                         reviewedProject: { is_recommended: 1 }
                     },

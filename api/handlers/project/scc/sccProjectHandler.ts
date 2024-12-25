@@ -23,6 +23,7 @@ export default class SccProjectHandler {
             }
     
             const params = validationResult.data;
+            const searchCondition = params.search ? { title: { contains: params.search } } : {};
     
             const [reviewedProjects, notReviewedProjects] = await Promise.all([
                 prisma.project.findMany({
@@ -32,7 +33,7 @@ export default class SccProjectHandler {
                             major_id: Number(params.major_id),
                             course_id: params.course_id,
                             status_id: 3,
-                            title: params.search
+                            ...searchCondition
                         }
                     },
                     include: {
@@ -56,7 +57,7 @@ export default class SccProjectHandler {
                             major_id: Number(params.major_id),
                             course_id: params.course_id,
                             status_id: 2,
-                            title: params.search
+                            ...searchCondition
                         },
                         assessment: { grade: { gte: 4 } }
                     },

@@ -22,6 +22,7 @@ export default class HopProjectHandler {
             }
     
             const params = validationResult.data;
+            const searchCondition = params.search ? { title: { contains: params.search } } : {};
     
             const [reviewedProjects, notReviewedProjects] = await Promise.all([
                 prisma.project.findMany({
@@ -30,7 +31,7 @@ export default class HopProjectHandler {
                             semester_id: params.semester_id,
                             major_id: Number(params.major_id),
                             status_id: 4,
-                            title: params.search
+                            ...searchCondition
                         }
                     },
                     include: {
@@ -53,7 +54,7 @@ export default class HopProjectHandler {
                             semester_id: params.semester_id,
                             major_id: Number(params.major_id),
                             status_id: 3,
-                            title: params.search
+                            ...searchCondition
                         },
                         reviewedProject: { is_recommended: 1 }
                     },

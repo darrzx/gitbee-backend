@@ -32,7 +32,7 @@ export default class SccProjectHandler {
                             semester_id: params.semester_id,
                             major_id: Number(params.major_id),
                             course_id: params.course_id,
-                            status_id: 3,
+                            status_id: { gte: 3 },
                             ...searchCondition
                         }
                     },

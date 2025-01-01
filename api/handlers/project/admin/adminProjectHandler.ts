@@ -98,14 +98,17 @@ export default class AdminProjectHandler {
             const formattedSubmittedProjects = await formatProjects(submittedProjects);
             const formattedGradedProjects = await formatProjects(gradedProjects);
             const formattedReviewedProjects = await formatProjects(reviewedProjects);
-    
+            const formattedOutstandingProjects = await formatProjects(outstandingProjects);
+
             const response = {
                 "count submitted": formattedSubmittedProjects.length,
                 "count graded": formattedGradedProjects.length,
                 "count reviewed": formattedReviewedProjects.length,
+                "count outstanding": formattedOutstandingProjects.length,
                 "submitted": formattedSubmittedProjects,
                 "graded": formattedGradedProjects,
-                "reviewed": formattedReviewedProjects
+                "reviewed": formattedReviewedProjects,
+                "outstanding": formattedOutstandingProjects
             };
     
             sendSuccessResponse(res, response);

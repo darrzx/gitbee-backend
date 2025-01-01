@@ -38,7 +38,7 @@ export default class AdminProjectHandler {
                 }),
             });
     
-            const [submittedProjects, gradedProjects, reviewedProjects] = await Promise.all([
+            const [submittedProjects, gradedProjects, reviewedProjects, outstandingProjects] = await Promise.all([
                 prisma.project.findMany({
                     where: whereConditions(1),
                     include: {
@@ -46,11 +46,6 @@ export default class AdminProjectHandler {
                         projectGroups: true,
                         galleries: true,
                         projectTechnologies: true,
-                    },
-                    orderBy: {
-                        assessment: {
-                            grade: 'desc'
-                        }
                     }
                 }),
                 prisma.project.findMany({
@@ -70,6 +65,21 @@ export default class AdminProjectHandler {
                 }),
                 prisma.project.findMany({
                     where: whereConditions(3),
+                    include: {
+                        projectDetail: true,
+                        projectGroups: true,
+                        galleries: true,
+                        projectTechnologies: true,
+                        assessment: true
+                    },
+                    orderBy: {
+                        assessment: {
+                            grade: 'desc'
+                        }
+                    }
+                }),
+                prisma.project.findMany({
+                    where: whereConditions(4),
                     include: {
                         projectDetail: true,
                         projectGroups: true,

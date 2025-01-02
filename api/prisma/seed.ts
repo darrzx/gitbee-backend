@@ -133,14 +133,21 @@ async function main() {
             });
         }
 
-        if(params.status_id == 2) {
+        if(params.status_id == 2 || params.status_id == 3 || params.status_id == 4) {
+            let gradeValue;
+            if (params.status_id === 2) {
+                gradeValue = Math.floor(Math.random() * 3) + 1;
+            } else {
+                gradeValue = Math.floor(Math.random() * 2) + 4;
+            }
+
             await prisma.assessment.create({
                 data: {
                     project_id: newProject.id,
-                    grade: Math.floor(Math.random() * 5) + 1,
+                    grade: gradeValue,
                     reason: "Bagus",
-                    created_at: new Date()
-                }
+                    created_at: new Date(),
+                },
             });
 
             await prisma.class.create({
@@ -152,7 +159,9 @@ async function main() {
                     finalized_at: new Date()
                 }
             })
-        } else if(params.status_id == 3) {
+        }
+        
+        if(params.status_id == 3 || params.status_id == 4) {           
             await prisma.reviewedProject.create({
                 data: {
                     project_id: newProject.id,
@@ -161,7 +170,9 @@ async function main() {
                     created_at: new Date()
                 }
             });
-        } else if(params.status_id == 4) {
+        }
+        
+        if(params.status_id == 4) {
             await prisma.outstandingProject.create({
                 data: {
                     project_id: newProject.id,

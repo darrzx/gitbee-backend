@@ -13,6 +13,7 @@ export default class AdminProjectHandler {
             const schema = z.object({
                 search: z.string().optional(),
                 majorFilter: z.string().optional(), 
+                categoryFilter: z.string().optional(), 
                 semester_id: z.string().optional()
             });
     
@@ -26,6 +27,7 @@ export default class AdminProjectHandler {
                 projectDetail: {
                     status_id: statusId,
                     ...(params.majorFilter && { major_id: Number(params.majorFilter) }),
+                    ...(params.categoryFilter && { category_id: Number(params.categoryFilter) }),
                     ...(params.semester_id && { semester_id: params.semester_id })
                 },
                 ...(params.search && {

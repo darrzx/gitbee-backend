@@ -5,6 +5,7 @@ import { projects } from "./seeds/project";
 import { statuses } from "./seeds/status";
 import { technologies } from "./seeds/technology";
 import { PrismaClient } from "@prisma/client";
+import { users } from "./seeds/user";
 const prisma = new PrismaClient();
 
 async function main() {
@@ -17,6 +18,7 @@ async function main() {
     await prisma.projectGroup.deleteMany({});
     await prisma.projectTechnology.deleteMany({});
     await prisma.gallery.deleteMany({});
+    await prisma.user.deleteMany({});
 
     await prisma.$executeRaw`ALTER TABLE status AUTO_INCREMENT = 1`;
     await prisma.$executeRaw`ALTER TABLE category AUTO_INCREMENT = 1`;
@@ -27,6 +29,7 @@ async function main() {
     await prisma.$executeRaw`ALTER TABLE project_group AUTO_INCREMENT = 1`;
     await prisma.$executeRaw`ALTER TABLE project_technology AUTO_INCREMENT = 1`;
     await prisma.$executeRaw`ALTER TABLE gallery AUTO_INCREMENT = 1`;
+    await prisma.$executeRaw`ALTER TABLE user AUTO_INCREMENT = 1`;
 
     // Seed statuses
     await prisma.status.createMany({
@@ -51,6 +54,12 @@ async function main() {
         data: majors
     });
     console.log('Major data seeded successfully.');
+
+    // Seed users
+    await prisma.user.createMany({
+        data: users
+    });
+    console.log('User data seeded successfully.');
 
     //seed projects
     for (const params of projects) {

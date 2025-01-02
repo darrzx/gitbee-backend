@@ -130,5 +130,51 @@ export const projects = [
         group_members: ["2501959296", "2540115465"],
         technology_ids: [2, 4, 9],
         group: 3
+    },
+    {
+        lecturer_id: "D5432",
+        student_leader_id: "2501970166",
+        title: "Project Reviewed",
+        semester_id: "be992b30-4b38-4361-8404-25f2d6912754",
+        course_id: "COMP6100001",
+        class: "BW22",
+        github_link: "https://github.com/username/AIChatbot",
+        project_link: "https://aichatbot.com",
+        documentation: "https://github.com/username/AIChatbot/wiki",
+        thumbnail: "https://aichatbot.com/images/thumbnail.png",
+        description: "An intelligent chatbot for customer service automation.",
+        status_id: 3,
+        category_id: 1,
+        major_id: 6,
+        gallery: [
+            "https://aichatbot.com/images/gallery1.png",
+            "https://aichatbot.com/images/gallery2.png"
+        ],
+        group_members: ["2504829348", "2504938237"],
+        technology_ids: [2, 4, 9],
+        group: 4
+    },
+    {
+        lecturer_id: "D5432",
+        student_leader_id: "2501959296",
+        title: "Project Outstanding",
+        semester_id: "be992b30-4b38-4361-8404-25f2d6912754",
+        course_id: "COMP6100001",
+        class: "BW22",
+        github_link: "https://github.com/username/AIChatbot",
+        project_link: "https://aichatbot.com",
+        documentation: "https://github.com/username/AIChatbot/wiki",
+        thumbnail: "https://aichatbot.com/images/thumbnail.png",
+        description: "An intelligent chatbot for customer service automation.",
+        status_id: 4,
+        category_id: 1,
+        major_id: 6,
+        gallery: [
+            "https://aichatbot.com/images/gallery1.png",
+            "https://aichatbot.com/images/gallery2.png"
+        ],
+        group_members: ["2594059382", "2504938217"],
+        technology_ids: [2, 4, 9],
+        group: 5
     }
 ];

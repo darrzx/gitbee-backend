@@ -152,6 +152,24 @@ async function main() {
                     finalized_at: new Date()
                 }
             })
+        } else if(params.status_id == 3) {
+            await prisma.reviewedProject.create({
+                data: {
+                    project_id: newProject.id,
+                    is_recommended: 1,
+                    feedback: "Feedback Bagus banget",
+                    created_at: new Date()
+                }
+            });
+        } else if(params.status_id == 4) {
+            await prisma.outstandingProject.create({
+                data: {
+                    project_id: newProject.id,
+                    is_outstanding: 1,
+                    feedback: "Feedback Bagus banget",
+                    created_at: new Date()
+                }
+            });
         }
     }
     console.log('Project data seeded successfully.');

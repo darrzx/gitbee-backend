@@ -1,13 +1,14 @@
 import { z } from "zod";
-import type { Request, Response, NextFunction } from "express";
+import type { Request, Response } from "express";
 import validateSchema from "api/utils/validator/validateSchema";
 import { sendErrorResponse, sendSuccessResponse } from "api/utils/response/response";
 import { PrismaClient } from "@prisma/client";
 
 const prisma = new PrismaClient();
 
-export default class AdminCategoryHandler {
-    static async insertCategory(req : Request, res : Response, next : NextFunction) {
+export default class AdminTechnologyHandler {
+
+    static async insertTechnology(req : Request, res : Response) {
         try {
             const schema = z.object({ name: z.string() });
       
@@ -20,19 +21,19 @@ export default class AdminCategoryHandler {
                 name: validationResult.data.name
             };
     
-            const newCategory = await prisma.category.create({
+            const newTechnology = await prisma.technology.create({
                 data: {
                     name: params.name
                 },
             });
     
-            sendSuccessResponse(res, newCategory);
+            sendSuccessResponse(res, newTechnology);
         } catch (error) {
             sendErrorResponse(res, error.message ? error.message : "Insert Failed");
         }
     }
 
-    static async updateCategory(req : Request, res : Response, next : NextFunction) {
+    static async updateTechnology(req : Request, res : Response) {
         try {
             const schema = z.object({ 
                 id: z.string(), 
@@ -46,7 +47,7 @@ export default class AdminCategoryHandler {
 
             const params = validationResult.data;
     
-            const updatedCategory = await prisma.category.update({
+            const updatedTechnology = await prisma.technology.update({
                 where: {
                     id: Number(params.id)
                 },
@@ -55,7 +56,7 @@ export default class AdminCategoryHandler {
                 }
             });
     
-            sendSuccessResponse(res, updatedCategory);
+            sendSuccessResponse(res, updatedTechnology);
         } catch (error) {
             sendErrorResponse(res, error.message ? error.message : "Update Failed");
         }

@@ -43,29 +43,4 @@ export default class TechnologyHandler {
             sendErrorResponse(res, error.message ? error.message : "Fetch Failed");
         }
     }    
-
-    static async insertTechnology(req : Request, res : Response) {
-        try {
-            const schema = z.object({ name: z.string() });
-      
-            const validationResult = validateSchema(schema, req.body);
-            if (validationResult.error) {
-                return sendErrorResponse(res, validationResult.details);
-            }
-
-            const params = {
-                name: validationResult.data.name
-            };
-    
-            const newTechnology = await prisma.technology.create({
-                data: {
-                    name: params.name
-                },
-            });
-    
-            sendSuccessResponse(res, newTechnology);
-        } catch (error) {
-            sendErrorResponse(res, error.message ? error.message : "Insert Failed");
-        }
-    }
 }

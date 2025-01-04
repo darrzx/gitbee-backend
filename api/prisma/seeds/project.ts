@@ -14,7 +14,7 @@ export const projects = [
         status_id: 1,
         category_id: 2,
         major_id: 6,
-        gallery: ["https://github.com/darrzx/FaREbook"],
+        gallery: ["https://cdn0-production-images-kly.akamaized.net/UYY-Gy7HFn1rTTO2r5XVcR6nGa0=/640x360/smart/filters:quality(75):strip_icc():format(webp)/kly-media-production/medias/4982180/original/042673500_1730095950-cara-menggambar-pemandangan.jpg"],
         group_members: ["2501970166", "2540115465"],
         technology_ids: [1, 5, 11],
         group: 1
@@ -29,14 +29,14 @@ export const projects = [
         github_link: "https://github.com/username/EcommerceApp",
         project_link: "https://ecommerceapp.com",
         documentation: "https://github.com/username/EcommerceApp/wiki",
-        thumbnail: "https://ecommerceapp.com/images/thumbnail.png",
+        thumbnail: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS0P_sWONBhiAVR3_KbxWm95mEI64uBRs2kmiAhS9GqBvCPFf70Y7v6rVGgbDY9_xMTqrU&usqp=CAU",
         description: "An e-commerce application for buying and selling goods.",
         status_id: 1,
         category_id: 3,
         major_id: 6,
         gallery: [
-            "https://ecommerceapp.com/images/gallery1.png",
-            "https://ecommerceapp.com/images/gallery2.png"
+            "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQmODe2PNlQP5xHDfcizbsFY1poB64bBOVZyFH58xSrc0I8llRqjbUjOUkQHqsRxkg-b9o&usqp=CAU",
+            "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQmODe2PNlQP5xHDfcizbsFY1poB64bBOVZyFH58xSrc0I8llRqjbUjOUkQHqsRxkg-b9o&usqp=CAU"
         ],
         group_members: ["2501959296", "2501970166"],
         technology_ids: [3, 7, 8],
@@ -52,14 +52,14 @@ export const projects = [
         github_link: "https://github.com/username/AIChatbot",
         project_link: "https://aichatbot.com",
         documentation: "https://github.com/username/AIChatbot/wiki",
-        thumbnail: "https://aichatbot.com/images/thumbnail.png",
+        thumbnail: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQq41ICT8h5P10y4_TtotzGgHMa40_oUOawgeQ0aQDIiTUjAoLqjivq_emLhWG1tcP7pwM&usqp=CAU",
         description: "An intelligent chatbot for customer service automation.",
         status_id: 1,
         category_id: 1,
         major_id: 6,
         gallery: [
-            "https://aichatbot.com/images/gallery1.png",
-            "https://aichatbot.com/images/gallery2.png"
+            "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS0P_sWONBhiAVR3_KbxWm95mEI64uBRs2kmiAhS9GqBvCPFf70Y7v6rVGgbDY9_xMTqrU&usqp=CAU",
+            "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQq41ICT8h5P10y4_TtotzGgHMa40_oUOawgeQ0aQDIiTUjAoLqjivq_emLhWG1tcP7pwM&usqp=CAU"
         ],
         group_members: ["2501959296", "2540115465"],
         technology_ids: [2, 4, 9],
@@ -75,12 +75,12 @@ export const projects = [
         github_link: "https://github.com/darrzx/FaREbook",
         project_link: "https://github.com/darrzx/FaREbook",
         documentation: "https://github.com/darrzx/FaREbook",
-        thumbnail: "https://github.com/darrzx/FaREbook",
+        thumbnail: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRwYg9071jnR4RXsdsfc28hvNAEec7qFRfxYNIyI_mc2L-5Do_YeOD0dOSs7Mr437ah8U8&usqp=CAU",
         description: "Halo ini description buat testing hehehehe",
         status_id: 2,
         category_id: 2,
         major_id: 6,
-        gallery: ["https://github.com/darrzx/FaREbook"],
+        gallery: ["https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRwYg9071jnR4RXsdsfc28hvNAEec7qFRfxYNIyI_mc2L-5Do_YeOD0dOSs7Mr437ah8U8&usqp=CAU"],
         group_members: ["2501970166", "2540115465"],
         technology_ids: [1, 5, 11],
         group: 1
@@ -95,14 +95,14 @@ export const projects = [
         github_link: "https://github.com/username/EcommerceApp",
         project_link: "https://ecommerceapp.com",
         documentation: "https://github.com/username/EcommerceApp/wiki",
-        thumbnail: "https://ecommerceapp.com/images/thumbnail.png",
+        thumbnail: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQxCHpiew8ZyGiPY4t-RCMXQoYYLPlcde2x5Q6aO0oD3FOm2Xbx_uSipV8am8ba_y5nZgA&usqp=CAU",
         description: "An e-commerce application for buying and selling goods.",
         status_id: 2,
         category_id: 3,
         major_id: 6,
         gallery: [
-            "https://ecommerceapp.com/images/gallery1.png",
-            "https://ecommerceapp.com/images/gallery2.png"
+            "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRwYg9071jnR4RXsdsfc28hvNAEec7qFRfxYNIyI_mc2L-5Do_YeOD0dOSs7Mr437ah8U8&usqp=CAU",
+            "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRwYg9071jnR4RXsdsfc28hvNAEec7qFRfxYNIyI_mc2L-5Do_YeOD0dOSs7Mr437ah8U8&usqp=CAU"
         ],
         group_members: ["2501959296", "2501970166"],
         technology_ids: [3, 7, 8],
@@ -118,14 +118,14 @@ export const projects = [
         github_link: "https://github.com/username/AIChatbot",
         project_link: "https://aichatbot.com",
         documentation: "https://github.com/username/AIChatbot/wiki",
-        thumbnail: "https://aichatbot.com/images/thumbnail.png",
+        thumbnail: "https://img.pikbest.com/photo/20240809/beautiful-landscape-painting-of-nature-forest-background-image_10711075.jpg!w700wp",
         description: "An intelligent chatbot for customer service automation.",
         status_id: 2,
         category_id: 1,
         major_id: 6,
         gallery: [
-            "https://aichatbot.com/images/gallery1.png",
-            "https://aichatbot.com/images/gallery2.png"
+            "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRfAFxobPbadSj98wV_mi91UADyg9JjeCQ2nURphZj1QdlUquf6BYnFUZz-pULn7ANJY0o&usqp=CAU",
+            "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRfAFxobPbadSj98wV_mi91UADyg9JjeCQ2nURphZj1QdlUquf6BYnFUZz-pULn7ANJY0o&usqp=CAU"
         ],
         group_members: ["2501959296", "2540115465"],
         technology_ids: [2, 4, 9],
@@ -141,14 +141,14 @@ export const projects = [
         github_link: "https://github.com/username/AIChatbot",
         project_link: "https://aichatbot.com",
         documentation: "https://github.com/username/AIChatbot/wiki",
-        thumbnail: "https://aichatbot.com/images/thumbnail.png",
+        thumbnail: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTvlLR-i2gUh0OcUWktZFznScJAQhsDyAIDbKYESAhdF1ZUp9q6kyI-PxIOYu7KGTFQt7A&usqp=CAU",
         description: "An intelligent chatbot for customer service automation.",
         status_id: 3,
         category_id: 1,
         major_id: 6,
         gallery: [
-            "https://aichatbot.com/images/gallery1.png",
-            "https://aichatbot.com/images/gallery2.png"
+            "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT5CZDNgQQyn-rYaDS7wV8x3o_GzvJA1-o_pgmYCAaZD9JdcIugpU0ZXviTFuvkZVZEVWg&usqp=CAU",
+            "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT5CZDNgQQyn-rYaDS7wV8x3o_GzvJA1-o_pgmYCAaZD9JdcIugpU0ZXviTFuvkZVZEVWg&usqp=CAU"
         ],
         group_members: ["2504829348", "2504938237"],
         technology_ids: [2, 4, 9],
@@ -164,14 +164,14 @@ export const projects = [
         github_link: "https://github.com/username/AIChatbot",
         project_link: "https://aichatbot.com",
         documentation: "https://github.com/username/AIChatbot/wiki",
-        thumbnail: "https://aichatbot.com/images/thumbnail.png",
+        thumbnail: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR7_FpfAiKvEx6eQ0UFl74t_NqcAvVoII8CwnCtTz1verUcqYyiqNGJS8Yu9lFszR0xLSY&usqp=CAU",
         description: "An intelligent chatbot for customer service automation.",
         status_id: 4,
         category_id: 1,
         major_id: 6,
         gallery: [
-            "https://aichatbot.com/images/gallery1.png",
-            "https://aichatbot.com/images/gallery2.png"
+            "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT2dBGO39U8cmYRBmYqLjH2gh6cF2n5uC1SBjpAMRXAADH1W3RvLqUiMP1tcL_-TR3CtG8&usqp=CAU",
+            "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT2dBGO39U8cmYRBmYqLjH2gh6cF2n5uC1SBjpAMRXAADH1W3RvLqUiMP1tcL_-TR3CtG8&usqp=CAU"
         ],
         group_members: ["2594059382", "2504938217"],
         technology_ids: [2, 4, 9],

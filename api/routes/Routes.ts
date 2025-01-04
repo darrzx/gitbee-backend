@@ -12,6 +12,7 @@ import assessmentRoutes from "./assessment/assessmentRoutes";
 import classRoutes from "./class/classRoutes";
 import reviewedProjectRoutes from "./reviewedProject/reviewedProjectRoutes";
 import outstandingProjectRoutes from "./outstandingProject/outstandingProjectRoutes";
+import deadlineRoutes from "./deadline/deadlineRoutes";
 
 const routes = express.Router();
 
@@ -35,5 +36,6 @@ routes.use("/technology", technologyRoutes);
 routes.use("/major", majorRoutes);
 routes.use("/group", groupRoutes);
 routes.use("/assessment", assessmentRoutes);
+routes.use("/deadline", deadlineRoutes);
 
 export default routes;

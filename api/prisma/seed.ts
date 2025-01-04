@@ -6,6 +6,7 @@ import { statuses } from "./seeds/status";
 import { technologies } from "./seeds/technology";
 import { PrismaClient } from "@prisma/client";
 import { users } from "./seeds/user";
+import { deadlines } from "./seeds/deadline";
 const prisma = new PrismaClient();
 
 async function main() {
@@ -19,6 +20,7 @@ async function main() {
     await prisma.projectTechnology.deleteMany({});
     await prisma.gallery.deleteMany({});
     await prisma.user.deleteMany({});
+    await prisma.deadline.deleteMany({});
 
     await prisma.$executeRaw`ALTER TABLE status AUTO_INCREMENT = 1`;
     await prisma.$executeRaw`ALTER TABLE category AUTO_INCREMENT = 1`;
@@ -30,6 +32,7 @@ async function main() {
     await prisma.$executeRaw`ALTER TABLE project_technology AUTO_INCREMENT = 1`;
     await prisma.$executeRaw`ALTER TABLE gallery AUTO_INCREMENT = 1`;
     await prisma.$executeRaw`ALTER TABLE user AUTO_INCREMENT = 1`;
+    await prisma.$executeRaw`ALTER TABLE deadline AUTO_INCREMENT = 1`;
 
     // Seed statuses
     await prisma.status.createMany({
@@ -60,6 +63,12 @@ async function main() {
         data: users
     });
     console.log('User data seeded successfully.');
+
+    // Seed deadline
+    await prisma.deadline.createMany({
+        data: deadlines
+    });
+    console.log('Deadline data seeded successfully.');
 
     //seed projects
     for (const params of projects) {

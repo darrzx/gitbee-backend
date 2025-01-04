@@ -181,3 +181,11 @@ model Class {
 
   @@map("class")
 }
+
+model Deadline {
+  id                  Int                @id @default(autoincrement())
+  periode             String             @db.VarChar(50)
+  deadline_at         String             @db.VarChar(50)
+
+  @@map("deadline")
+}

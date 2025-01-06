@@ -13,7 +13,6 @@ export default class SccProjectHandler {
             const schema = z.object({
                 major_id: z.string().optional(),
                 semester_id: z.string(),
-                course_id: z.string(),
                 search: z.string().optional()
             });
     
@@ -32,7 +31,6 @@ export default class SccProjectHandler {
                         projectDetail: {
                             semester_id: params.semester_id,
                             ...majorCondition,
-                            course_id: params.course_id,
                             status_id: { gte: 3 },
                             ...searchCondition
                         }
@@ -56,7 +54,6 @@ export default class SccProjectHandler {
                         projectDetail: {
                             semester_id: params.semester_id,
                             ...majorCondition,
-                            course_id: params.course_id,
                             status_id: 2,
                             ...searchCondition
                         },

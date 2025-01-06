@@ -7,11 +7,41 @@ import { PrismaClient } from "@prisma/client";
 const prisma = new PrismaClient();
 
 export default class AdminUserHandler {
-    static async updateRole(req: Request<{ nim: string }>, res: Response) {
+    static async insertUser(req : Request, res : Response) {
+        try {
+            const schema = z.object({
+                lecturer_code: z.string(),
+                email: z.string(), 
+                role: z.string() 
+            });
+      
+            const validationResult = validateSchema(schema, req.body);
+            if (validationResult.error) {
+                return sendErrorResponse(res, validationResult.details);
+            }
+
+            const params = validationResult.data;
+    
+            const newUser = await prisma.user.create({
+                data: {
+                    lecturer_code: params.lecturer_code,
+                    email: params.email,
+                    role: params.role,
+                },
+            });
+    
+            sendSuccessResponse(res, newUser);
+        } catch (error) {
+            sendErrorResponse(res, error.message ? error.message : "Insert Failed");
+        }
+    }
+
+    static async updateRole(req: Request, res: Response) {
         try {
             const schema = z.object({ 
                 id: z.string(), 
-                role: z.string() 
+                role: z.string(),
+                major_ids: z.array(z.string()).optional()
             });
       
             const validationResult = validateSchema(schema, req.body);
@@ -29,6 +59,16 @@ export default class AdminUserHandler {
                     role: params.role
                 }
             });
+
+            if(params.role == "HoP" && params.major_ids) {
+                const newHoPMajors = params.major_ids.map(major_id => ({
+                    user_id: Number(params.id),
+                    major_id: Number(major_id),
+                }));
+                await prisma.hoPMajor.createMany({
+                    data: newHoPMajors
+                });
+            }
     
             sendSuccessResponse(res, updatedUserRole);
         } catch (error) {

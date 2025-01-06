@@ -11,7 +11,7 @@ export default class SccProjectHandler {
     static async getAllProject(req: Request, res: Response, next: NextFunction) {
         try {
             const schema = z.object({
-                major_id: z.string(),
+                major_id: z.string().optional(),
                 semester_id: z.string(),
                 course_id: z.string(),
                 search: z.string().optional()
@@ -24,13 +24,14 @@ export default class SccProjectHandler {
     
             const params = validationResult.data;
             const searchCondition = params.search ? { title: { contains: params.search } } : {};
-    
+            const majorCondition = params.major_id ? { major_id: Number(params.major_id) } : {};
+
             const [reviewedProjects, notReviewedProjects] = await Promise.all([
                 prisma.project.findMany({
                     where: {
                         projectDetail: {
                             semester_id: params.semester_id,
-                            major_id: Number(params.major_id),
+                            ...majorCondition,
                             course_id: params.course_id,
                             status_id: { gte: 3 },
                             ...searchCondition
@@ -54,7 +55,7 @@ export default class SccProjectHandler {
                     where: {
                         projectDetail: {
                             semester_id: params.semester_id,
-                            major_id: Number(params.major_id),
+                            ...majorCondition,
                             course_id: params.course_id,
                             status_id: 2,
                             ...searchCondition

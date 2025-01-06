@@ -38,15 +38,16 @@ export default class AuthHandler {
             const username = atlantis.data.BinusianID ?? "";
             const nim = atlantis.data.NIM ?? "";
 
-            const isAdmin = await prisma.user.findFirst({
+            const user = await prisma.user.findFirst({
                 where: {
                     email: email,
                 },
                 select: {
                     email: true,
+                    role: true,
                 },
             });
-            const role = isAdmin ? "Admin" : atlantis.data.KodeDosen ? "Lecturer" : "Student";
+            const role = user?.role ?? "student";
 
             const token = createToken(
                 nim,

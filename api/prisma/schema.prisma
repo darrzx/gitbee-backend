@@ -15,8 +15,11 @@ datasource db {
 
 model User {
   id                  Int                @id @default(autoincrement())
+  lecturer_code       String             @db.VarChar(50)
   email               String             @db.VarChar(50)
+  role                String             @db.VarChar(50)
   created_at          DateTime           @default(now())
+  hopMajor            HoPMajor?
 
   @@map("user")
 }
@@ -154,6 +157,7 @@ model Major {
   id                Int             @id @default(autoincrement())
   name              String          @db.VarChar(100)
   projectDetails    ProjectDetail[] 
+  hopMajor          HoPMajor?
 
   @@map("major")
 }
@@ -188,4 +192,14 @@ model Deadline {
   deadline_at         String             @db.VarChar(50)
 
   @@map("deadline")
+}
+
+model HoPMajor {
+  id                Int             @id @default(autoincrement())
+  user_id           Int             @unique
+  major_id          Int             @unique
+  user              User            @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  major             Major           @relation(fields: [major_id], references: [id], onDelete: Cascade)
+
+  @@map("hop_major")
 }

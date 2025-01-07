@@ -37,10 +37,15 @@ export default class AuthHandler {
 
             const username = atlantis.data.BinusianID ?? "";
             const nim = atlantis.data.NIM ?? "";
+            const lecturer_code = atlantis.data.KodeDosen ?? "";
 
             const user = await prisma.user.findFirst({
                 where: {
-                    email: email,
+                    OR: [
+                        { email: email },
+                        { name: name },
+                        { lecturer_code: lecturer_code },
+                    ],
                 },
                 select: {
                     email: true,

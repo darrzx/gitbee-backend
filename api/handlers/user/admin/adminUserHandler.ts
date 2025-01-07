@@ -20,9 +20,7 @@ export default class AdminUserHandler {
                 return sendErrorResponse(res, validationResult.message || "Validation Failed");
             }
     
-            const params = validationResult.data;
-    
-            const roleCondition = params.roleFilter ? { role: params.roleFilter } : {};
+            const params = validationResult.data;    
             const searchCondition = params.search
                 ? {
                     OR: [
@@ -39,7 +37,7 @@ export default class AdminUserHandler {
             if (params.roleFilter === "SCC" || !params.roleFilter) {
                 scc = await prisma.user.findMany({
                     where: {
-                        role: "scc",
+                        role: "SCC",
                         ...searchCondition
                     }
                 });
@@ -48,7 +46,7 @@ export default class AdminUserHandler {
             if (params.roleFilter === "HoP" || !params.roleFilter) {
                 hop = await prisma.user.findMany({
                     where: {
-                        role: "hop",
+                        role: "HoP",
                         ...searchCondition
                     }
                 });
@@ -60,6 +58,42 @@ export default class AdminUserHandler {
             };
     
             sendSuccessResponse(res, response);
+        } catch (error) {
+            sendErrorResponse(res, error.message || "Fetch Failed");
+        }
+    }    
+
+    static async getLecturers(req: Request, res: Response) {
+        try {
+            const schema = z.object({
+                search: z.string().optional()
+            });
+    
+            const validationResult = validateSchema(schema, req.query);
+            if (validationResult.error) {
+                return sendErrorResponse(res, validationResult.message || "Validation Failed");
+            }
+    
+            const params = validationResult.data;
+    
+            const searchCondition = params.search
+                ? {
+                    OR: [
+                        { lecturer_code: { contains: params.search } },
+                        { email: { contains: params.search } },
+                        { name: { contains: params.search } },
+                    ]
+                }
+                : {};
+    
+            const lecturers = await prisma.user.findMany({
+                where: {
+                    role: "Lecturer",
+                    ...searchCondition
+                }
+            });
+    
+            sendSuccessResponse(res, lecturers);
         } catch (error) {
             sendErrorResponse(res, error.message || "Fetch Failed");
         }

@@ -5,6 +5,7 @@ import adminUserRoutes from "./admin/adminUserRoutes";
 const userRoutes = express.Router();
 
 userRoutes.get("/get-name", UserHandler.getName);
+userRoutes.get("/get-role", UserHandler.getAllRole);
 
 userRoutes.use("/admin", adminUserRoutes);
 

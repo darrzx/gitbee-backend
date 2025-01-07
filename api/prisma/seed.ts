@@ -7,6 +7,7 @@ import { technologies } from "./seeds/technology";
 import { PrismaClient } from "@prisma/client";
 import { users } from "./seeds/user";
 import { deadlines } from "./seeds/deadline";
+import { roles } from "./seeds/role";
 const prisma = new PrismaClient();
 
 async function main() {
@@ -63,6 +64,12 @@ async function main() {
         data: users
     });
     console.log('User data seeded successfully.');
+
+    // Seed roles
+    await prisma.role.createMany({
+        data: roles
+    });
+    console.log('Role data seeded successfully.');
 
     // Seed deadline
     await prisma.deadline.createMany({

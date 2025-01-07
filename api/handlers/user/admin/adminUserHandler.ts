@@ -105,7 +105,8 @@ export default class AdminUserHandler {
                 lecturer_code: z.string(),
                 email: z.string(), 
                 name: z.string(),
-                role: z.string() 
+                role: z.string(),
+                major_ids: z.array(z.string()).optional()
             });
       
             const validationResult = validateSchema(schema, req.body);
@@ -123,6 +124,16 @@ export default class AdminUserHandler {
                     role: params.role,
                 },
             });
+
+            if(params.role == "HoP" && params.major_ids) {
+                const newHoPMajors = params.major_ids.map(major_id => ({
+                    user_id: Number(newUser.id),
+                    major_id: Number(major_id),
+                }));
+                await prisma.hoPMajor.createMany({
+                    data: newHoPMajors
+                });
+            }
     
             sendSuccessResponse(res, newUser);
         } catch (error) {
@@ -209,6 +220,22 @@ export default class AdminUserHandler {
             sendSuccessResponse(res, createdUsers);
         } catch (error) {
             sendErrorResponse(res, error.message || "Failed to process the Excel file.");
+        }
+    }
+
+    static async removeDataExcel(req : Request, res : Response) {
+        try {    
+            const deletedUsers = await prisma.user.deleteMany({
+                where: {
+                    NOT: {
+                        role: "Admin"
+                    }
+                }
+            });
+    
+            sendSuccessResponse(res, deletedUsers);
+        } catch (error) {
+            sendErrorResponse(res, error.message ? error.message : "Remove Failed");
         }
     }
 }

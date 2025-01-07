@@ -11,5 +11,6 @@ adminUserRoutes.get("/get-lecturer", AdminUserHandler.getLecturers);
 adminUserRoutes.post("/insert-user", AdminUserHandler.insertUser);
 adminUserRoutes.patch("/update-role", AdminUserHandler.updateRole);
 adminUserRoutes.post("/upload-excel", upload.single("file"), AdminUserHandler.uploadExcel);
+adminUserRoutes.patch("/remove-data-excel", AdminUserHandler.removeDataExcel);
 
 export default adminUserRoutes;

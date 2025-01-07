@@ -7,6 +7,62 @@ import { PrismaClient } from "@prisma/client";
 const prisma = new PrismaClient();
 
 export default class AdminUserHandler {
+    static async getSccHop(req: Request, res: Response) {
+        try {
+            const schema = z.object({
+                roleFilter: z.string().optional(),
+                search: z.string().optional()
+            });
+    
+            const validationResult = validateSchema(schema, req.query);
+            if (validationResult.error) {
+                return sendErrorResponse(res, validationResult.message || "Validation Failed");
+            }
+    
+            const params = validationResult.data;
+    
+            const roleCondition = params.roleFilter ? { role: params.roleFilter } : {};
+            const searchCondition = params.search
+                ? {
+                    OR: [
+                        { lecturer_code: { contains: params.search } },
+                        { email: { contains: params.search } },
+                    ]
+                }
+                : {};
+    
+            let scc = null;
+            let hop = null;
+    
+            if (params.roleFilter === "SCC" || !params.roleFilter) {
+                scc = await prisma.user.findMany({
+                    where: {
+                        role: "scc",
+                        ...searchCondition
+                    }
+                });
+            }
+    
+            if (params.roleFilter === "HoP" || !params.roleFilter) {
+                hop = await prisma.user.findMany({
+                    where: {
+                        role: "hop",
+                        ...searchCondition
+                    }
+                });
+            }
+    
+            const response = {
+                scc,
+                hop
+            };
+    
+            sendSuccessResponse(res, response);
+        } catch (error) {
+            sendErrorResponse(res, error.message || "Fetch Failed");
+        }
+    }    
+
     static async insertUser(req : Request, res : Response) {
         try {
             const schema = z.object({

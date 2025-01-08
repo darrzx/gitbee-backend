@@ -243,7 +243,7 @@ export default class AdminUserHandler {
             }
 
             const schema = z.object({
-                semester_id: z.string(),
+                semester_name: z.string(),
                 lecturer_code: z.string(),
                 lecturer_name: z.string(), 
                 course_code: z.string(),
@@ -256,28 +256,52 @@ export default class AdminUserHandler {
             const sheetName = workbook.SheetNames[0];
             const worksheet = workbook.Sheets[sheetName];
             const rows: Record<string, any>[] = xlsx.utils.sheet_to_json(worksheet, { header: 1 }).slice(1);
+            const semesterRaw = rows[0][0];
+            let semesterName = "";
+            if (semesterRaw) {
+                const yearPart = Math.floor(semesterRaw / 100);
+                const termPart = semesterRaw % 100; 
+                const year = 2000 + yearPart;
 
+                if (termPart === 10) {
+                    semesterName = `Odd Semester ${year}/${year + 1}`;
+                } else if (termPart === 20) {
+                    semesterName = `Even Semester ${year}/${year + 1}`;
+                }
+            }
+
+            const uniqueCombinations = new Set<string>();
+            
             const validatedTransactions = rows
                 .map((row) => ({
-                    semester_id: row[0],
-                    lecturer_code: row[3],   
-                    lecturer_name: row[2],     
-                    course_code: row[9], 
-                    course_name: row[10], 
-                    class: row[11], 
+                    semester_name: semesterName,
+                    lecturer_code: row[3],
+                    lecturer_name: row[2],
+                    course_code: row[9],
+                    course_name: row[10],
+                    class: row[11],
                     location: row[13]
                 }))
+                .filter((row) => {
+                    const uniqueKey = `${row.semester_name}|${row.lecturer_code}|${row.course_code}|${row.class}|${row.location}`;
+                    
+                    if (uniqueCombinations.has(uniqueKey)) {
+                        return false;
+                    }
+                    uniqueCombinations.add(uniqueKey);
+                    return true;
+                })
                 .filter((row) => schema.safeParse(row).success);
     
             if (validatedTransactions.length === 0) {
                 return sendErrorResponse(res, "No valid rows found in the file.");
             }
     
-            const createdTransactions = await prisma.classTransaction.createMany({
-                data: validatedTransactions,
-            });
+            // const createdTransactions = await prisma.classTransaction.createMany({
+            //     data: validatedTransactions,
+            // });
 
-            sendSuccessResponse(res, createdTransactions);
+            sendSuccessResponse(res, validatedTransactions);
         } catch (error) {
             sendErrorResponse(res, error.message || "Failed to process the Excel file.");
         }

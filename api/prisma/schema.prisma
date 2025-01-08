@@ -165,7 +165,7 @@ model Major {
   id                Int             @id @default(autoincrement())
   name              String          @db.VarChar(100)
   projectDetails    ProjectDetail[] 
-  hopMajor          HoPMajor?
+  hopMajor          HoPMajor[]
 
   @@map("major")
 }
@@ -214,7 +214,7 @@ model HoPMajor {
 
 model ClassTransaction {
   id                  Int                @id @default(autoincrement())
-  semester_id         String             @db.VarChar(150)
+  semester_name       String             @db.VarChar(150)
   lecturer_code       String             @db.VarChar(50)
   lecturer_name       String             @db.VarChar(150)
   course_code         String             @db.VarChar(50)

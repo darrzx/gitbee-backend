@@ -150,6 +150,21 @@ export default class AdminUserHandler {
             }
 
             const params = validationResult.data;
+            const userExists = await prisma.user.findUnique({
+                where: {
+                    id: Number(params.id)
+                },
+                include: {
+                    hopMajor: true
+                }
+            });
+            if (userExists && userExists.role === "HoP" && params.role !== "HoP") {
+                await prisma.hoPMajor.deleteMany({
+                    where: {
+                        user_id: userExists.id
+                    }
+                });
+            }
     
             const updatedUserRole = await prisma.user.update({
                 where: {

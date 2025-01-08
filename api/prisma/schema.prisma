@@ -204,8 +204,8 @@ model Deadline {
 
 model HoPMajor {
   id                Int             @id @default(autoincrement())
-  user_id           Int             @unique
-  major_id          Int             @unique
+  user_id           Int             
+  major_id          Int             
   user              User            @relation(fields: [user_id], references: [id], onDelete: Cascade)
   major             Major           @relation(fields: [major_id], references: [id], onDelete: Cascade)
 

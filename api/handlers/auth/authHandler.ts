@@ -52,7 +52,7 @@ export default class AuthHandler {
                     role: true,
                 },
             });
-            const role = user?.role ?? "student";
+            const role = user?.role ?? "Student";
 
             const token = createToken(
                 nim,

@@ -216,8 +216,8 @@ export default class AdminUserHandler {
             const worksheet = workbook.Sheets[sheetName];
             const rows: Record<string, any>[] = xlsx.utils.sheet_to_json(worksheet, { header: 1 }).slice(1);
 
-            // testing 10 data
-            const firstTenRows = rows.slice(0, 10);
+            // testing 20 data
+            const firstTenRows = rows.slice(0, 20);
             const validatedUsers = firstTenRows
                 .map((row) => ({
                     lecturer_code: row[3],    
@@ -246,9 +246,11 @@ export default class AdminUserHandler {
         try {    
             const deletedUsers = await prisma.user.deleteMany({
                 where: {
-                    NOT: {
-                        role: "Admin"
-                    }
+                    NOT: [
+                        { role: "Admin" },
+                        { role: "SCC" },
+                        { role: "HoP" }
+                    ]
                 }
             });
     
@@ -294,8 +296,8 @@ export default class AdminUserHandler {
 
             const uniqueCombinations = new Set<string>();
             
-            // testing 10 data
-            const firstTenRows = rows.slice(0, 10);
+            // testing 20 data
+            const firstTenRows = rows.slice(0, 20);
             const validatedTransactions = firstTenRows
                 .map((row) => ({
                     semester_name: semesterName,

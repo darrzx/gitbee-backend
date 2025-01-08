@@ -23,6 +23,7 @@ async function main() {
     await prisma.user.deleteMany({});
     await prisma.deadline.deleteMany({});
     await prisma.role.deleteMany({});
+    await prisma.class.deleteMany({});
 
     await prisma.$executeRaw`ALTER TABLE status AUTO_INCREMENT = 1`;
     await prisma.$executeRaw`ALTER TABLE category AUTO_INCREMENT = 1`;
@@ -36,6 +37,7 @@ async function main() {
     await prisma.$executeRaw`ALTER TABLE user AUTO_INCREMENT = 1`;
     await prisma.$executeRaw`ALTER TABLE deadline AUTO_INCREMENT = 1`;
     await prisma.$executeRaw`ALTER TABLE role AUTO_INCREMENT = 1`;
+    await prisma.$executeRaw`ALTER TABLE class AUTO_INCREMENT = 1`;
 
     // Seed statuses
     await prisma.status.createMany({

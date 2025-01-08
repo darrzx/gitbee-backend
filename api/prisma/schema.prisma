@@ -15,9 +15,9 @@ datasource db {
 
 model User {
   id                  Int                @id @default(autoincrement())
-  lecturer_code       String             @db.VarChar(50)
-  email               String             @db.VarChar(50)
-  name                String             @db.VarChar(100)
+  lecturer_code       String             @unique @db.VarChar(50)
+  email               String             @db.VarChar(150)
+  name                String             @db.VarChar(150)
   role                String             @db.VarChar(50)
   created_at          DateTime           @default(now())
   hopMajor            HoPMajor[]
@@ -210,4 +210,17 @@ model HoPMajor {
   major             Major           @relation(fields: [major_id], references: [id], onDelete: Cascade)
 
   @@map("hop_major")
+}
+
+model ClassTransaction {
+  id                  Int                @id @default(autoincrement())
+  semester_id         String             @db.VarChar(150)
+  lecturer_code       String             @db.VarChar(50)
+  lecturer_name       String             @db.VarChar(150)
+  course_code         String             @db.VarChar(50)
+  course_name         String             @db.VarChar(100)
+  class               String             @db.VarChar(50)
+  location            String             @db.VarChar(50)
+
+  @@map("class_transaction")
 }

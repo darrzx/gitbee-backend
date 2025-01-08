@@ -194,7 +194,9 @@ export default class AdminUserHandler {
             const worksheet = workbook.Sheets[sheetName];
             const rows: Record<string, any>[] = xlsx.utils.sheet_to_json(worksheet, { header: 1 }).slice(1);
 
-            const validatedUsers = rows
+            // testing 3 data
+            const firstThreeRows = rows.slice(0, 10);
+            const validatedUsers = firstThreeRows
                 .map((row) => ({
                     lecturer_code: row[3],    
                     name: row[2],             
@@ -229,6 +231,63 @@ export default class AdminUserHandler {
             });
     
             sendSuccessResponse(res, deletedUsers);
+        } catch (error) {
+            sendErrorResponse(res, error.message ? error.message : "Remove Failed");
+        }
+    }
+
+    static async uploadTransactionExcel(req: Request, res: Response) {
+        try {
+            if (!req.file) {
+                return sendErrorResponse(res, "No file uploaded.");
+            }
+
+            const schema = z.object({
+                semester_id: z.string(),
+                lecturer_code: z.string(),
+                lecturer_name: z.string(), 
+                course_code: z.string(),
+                course_name: z.string(),
+                class: z.string(),
+                location: z.string()
+            });
+
+            const workbook = xlsx.read(req.file.buffer, { type: "buffer" });
+            const sheetName = workbook.SheetNames[0];
+            const worksheet = workbook.Sheets[sheetName];
+            const rows: Record<string, any>[] = xlsx.utils.sheet_to_json(worksheet, { header: 1 }).slice(1);
+
+            const validatedTransactions = rows
+                .map((row) => ({
+                    semester_id: row[0],
+                    lecturer_code: row[3],   
+                    lecturer_name: row[2],     
+                    course_code: row[9], 
+                    course_name: row[10], 
+                    class: row[11], 
+                    location: row[13]
+                }))
+                .filter((row) => schema.safeParse(row).success);
+    
+            if (validatedTransactions.length === 0) {
+                return sendErrorResponse(res, "No valid rows found in the file.");
+            }
+    
+            const createdTransactions = await prisma.classTransaction.createMany({
+                data: validatedTransactions,
+            });
+
+            sendSuccessResponse(res, createdTransactions);
+        } catch (error) {
+            sendErrorResponse(res, error.message || "Failed to process the Excel file.");
+        }
+    }
+
+    static async removeTransactionExcel(req : Request, res : Response) {
+        try {    
+            const deletedTransactions = await prisma.classTransaction.deleteMany({});
+    
+            sendSuccessResponse(res, deletedTransactions);
         } catch (error) {
             sendErrorResponse(res, error.message ? error.message : "Remove Failed");
         }

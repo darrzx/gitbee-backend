@@ -10,5 +10,17 @@ export const users = [
         email: "kelson.susilo@binus.edu",
         name: "Kelson Edbert Susilo",
         role: "Admin"
+    },
+    {
+        lecturer_code: "NC23-1",
+        email: "nicholas.chandra@binus.edu",
+        name: "Nicholas Chandra",
+        role: "SCC"
+    },
+    {
+        lecturer_code: "RA23-1",
+        email: "roger.laurent@binus.edu",
+        name: "Roger Laurent",
+        role: "HoP"
     }
 ];

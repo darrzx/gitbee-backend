@@ -67,6 +67,13 @@ async function main() {
     });
     console.log('User data seeded successfully.');
 
+    await prisma.hoPMajor.createMany({
+        data: {
+            user_id: 4,
+            major_id: 6
+        }
+    });
+
     // Seed roles
     await prisma.role.createMany({
         data: roles

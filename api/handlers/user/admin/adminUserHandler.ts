@@ -8,7 +8,7 @@ import xlsx from "xlsx";
 const prisma = new PrismaClient();
 
 export default class AdminUserHandler {
-    static async getSccHop(req: Request, res: Response) {
+    static async getUser(req: Request, res: Response) {
         try {
             const schema = z.object({
                 roleFilter: z.string().optional(),
@@ -33,7 +33,8 @@ export default class AdminUserHandler {
     
             let scc = null;
             let hop = null;
-    
+            let lecturer = null;
+
             if (params.roleFilter === "SCC" || !params.roleFilter) {
                 scc = await prisma.user.findMany({
                     where: {
@@ -51,49 +52,23 @@ export default class AdminUserHandler {
                     }
                 });
             }
+
+            if (params.roleFilter === "Lecturer" || !params.roleFilter) {
+                hop = await prisma.user.findMany({
+                    where: {
+                        role: "Lecturer",
+                        ...searchCondition
+                    }
+                });
+            }
     
             const response = {
                 scc,
-                hop
+                hop,
+                lecturer
             };
     
             sendSuccessResponse(res, response);
-        } catch (error) {
-            sendErrorResponse(res, error.message || "Fetch Failed");
-        }
-    }    
-
-    static async getLecturers(req: Request, res: Response) {
-        try {
-            const schema = z.object({
-                search: z.string().optional()
-            });
-    
-            const validationResult = validateSchema(schema, req.query);
-            if (validationResult.error) {
-                return sendErrorResponse(res, validationResult.message || "Validation Failed");
-            }
-    
-            const params = validationResult.data;
-    
-            const searchCondition = params.search
-                ? {
-                    OR: [
-                        { lecturer_code: { contains: params.search } },
-                        { email: { contains: params.search } },
-                        { name: { contains: params.search } },
-                    ]
-                }
-                : {};
-    
-            const lecturers = await prisma.user.findMany({
-                where: {
-                    role: "Lecturer",
-                    ...searchCondition
-                }
-            });
-    
-            sendSuccessResponse(res, lecturers);
         } catch (error) {
             sendErrorResponse(res, error.message || "Fetch Failed");
         }

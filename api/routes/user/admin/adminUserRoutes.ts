@@ -5,8 +5,7 @@ const upload = multer({ storage: multer.memoryStorage() });
 
 const adminUserRoutes = express.Router();
 
-adminUserRoutes.get("/get-scc-hop", AdminUserHandler.getSccHop);
-adminUserRoutes.get("/get-lecturer", AdminUserHandler.getLecturers);
+adminUserRoutes.get("/get-user", AdminUserHandler.getUser);
 
 adminUserRoutes.post("/insert-user", AdminUserHandler.insertUser);
 adminUserRoutes.patch("/update-role", AdminUserHandler.updateRole);

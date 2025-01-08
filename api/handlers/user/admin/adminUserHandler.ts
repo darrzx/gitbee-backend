@@ -54,7 +54,7 @@ export default class AdminUserHandler {
             }
 
             if (params.roleFilter === "Lecturer" || !params.roleFilter) {
-                hop = await prisma.user.findMany({
+                lecturer = await prisma.user.findMany({
                     where: {
                         role: "Lecturer",
                         ...searchCondition

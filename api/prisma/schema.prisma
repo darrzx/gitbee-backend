@@ -20,7 +20,7 @@ model User {
   name                String             @db.VarChar(150)
   role                String             @db.VarChar(50)
   created_at          DateTime           @default(now())
-  hopMajor            HoPMajor[]
+  hopMajors           HoPMajor[]
 
   @@map("user")
 }
@@ -165,7 +165,7 @@ model Major {
   id                Int             @id @default(autoincrement())
   name              String          @db.VarChar(100)
   projectDetails    ProjectDetail[] 
-  hopMajor          HoPMajor[]
+  hopMajors         HoPMajor[]
 
   @@map("major")
 }
@@ -203,12 +203,13 @@ model Deadline {
 }
 
 model HoPMajor {
-  id                Int             @id @default(autoincrement())
-  user_id           Int             
-  major_id          Int             
-  user              User            @relation(fields: [user_id], references: [id], onDelete: Cascade)
-  major             Major           @relation(fields: [major_id], references: [id], onDelete: Cascade)
+  id                  Int                 @id @default(autoincrement())
+  user_id             Int    
+  major_id            Int    
+  user                User                @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  major               Major               @relation(fields: [major_id], references: [id], onDelete: Cascade)
 
+  @@unique([user_id, major_id])
   @@map("hop_major")
 }
 

@@ -51,7 +51,7 @@ export default class AdminUserHandler {
                         ...searchCondition
                     },
                     include: {
-                        hopMajor: {
+                        hopMajors: {
                             select: {
                                 major: { 
                                     select: {
@@ -65,7 +65,7 @@ export default class AdminUserHandler {
                 });
                 hop = hopData.map((h) => ({
                     ...h,
-                    hop_major: h.hopMajor.map((hm) => ({
+                    hop_major: h.hopMajors.map((hm) => ({
                         id: hm.major.id,
                         name: hm.major.name,
                     })),
@@ -155,7 +155,7 @@ export default class AdminUserHandler {
                     id: Number(params.id)
                 },
                 include: {
-                    hopMajor: true
+                    hopMajors: true
                 }
             });
             if (userExists && userExists.role === "HoP" && params.role !== "HoP") {
@@ -176,12 +176,19 @@ export default class AdminUserHandler {
             });
 
             if(params.role == "HoP" && params.major_ids) {
+                await prisma.hoPMajor.deleteMany({
+                    where: {
+                        user_id: Number(params.id)
+                    }
+                });
+
                 const newHoPMajors = params.major_ids.map(major_id => ({
                     user_id: Number(params.id),
                     major_id: Number(major_id),
                 }));
                 await prisma.hoPMajor.createMany({
-                    data: newHoPMajors
+                    data: newHoPMajors,
+                    skipDuplicates: true
                 });
             }
     

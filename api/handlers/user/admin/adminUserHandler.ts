@@ -45,12 +45,32 @@ export default class AdminUserHandler {
             }
     
             if (params.roleFilter === "HoP" || !params.roleFilter) {
-                hop = await prisma.user.findMany({
+                const hopData = await prisma.user.findMany({
                     where: {
                         role: "HoP",
                         ...searchCondition
-                    }
+                    },
+                    include: {
+                        hopMajor: {
+                            select: {
+                                major: { 
+                                    select: {
+                                        id: true,
+                                        name: true
+                                    }
+                                }
+                            }
+                        }
+                    },
                 });
+                hop = hopData.map((h) => ({
+                    ...h,
+                    hop_major: h.hopMajor.map((hm) => ({
+                        id: hm.major.id,
+                        name: hm.major.name,
+                    })),
+                }));
+                hop.forEach((h) => delete h.hopMajor);
             }
 
             if (params.roleFilter === "Lecturer" || !params.roleFilter) {

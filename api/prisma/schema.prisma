@@ -20,7 +20,7 @@ model User {
   name                String             @db.VarChar(100)
   role                String             @db.VarChar(50)
   created_at          DateTime           @default(now())
-  hopMajor            HoPMajor?
+  hopMajor            HoPMajor[]
 
   @@map("user")
 }

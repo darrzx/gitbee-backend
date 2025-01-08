@@ -70,7 +70,7 @@ export default class AdminUserHandler {
                         name: hm.major.name,
                     })),
                 }));
-                hop.forEach((h) => delete h.hopMajor);
+                hop.forEach((h) => delete h.hopMajors);
             }
 
             if (params.roleFilter === "Lecturer" || !params.roleFilter) {
@@ -216,9 +216,9 @@ export default class AdminUserHandler {
             const worksheet = workbook.Sheets[sheetName];
             const rows: Record<string, any>[] = xlsx.utils.sheet_to_json(worksheet, { header: 1 }).slice(1);
 
-            // testing 3 data
-            const firstThreeRows = rows.slice(0, 10);
-            const validatedUsers = firstThreeRows
+            // testing 10 data
+            const firstTenRows = rows.slice(0, 10);
+            const validatedUsers = firstTenRows
                 .map((row) => ({
                     lecturer_code: row[3],    
                     name: row[2],             
@@ -294,7 +294,9 @@ export default class AdminUserHandler {
 
             const uniqueCombinations = new Set<string>();
             
-            const validatedTransactions = rows
+            // testing 10 data
+            const firstTenRows = rows.slice(0, 10);
+            const validatedTransactions = firstTenRows
                 .map((row) => ({
                     semester_name: semesterName,
                     lecturer_code: row[3],
@@ -319,11 +321,11 @@ export default class AdminUserHandler {
                 return sendErrorResponse(res, "No valid rows found in the file.");
             }
     
-            // const createdTransactions = await prisma.classTransaction.createMany({
-            //     data: validatedTransactions,
-            // });
+            const createdTransactions = await prisma.classTransaction.createMany({
+                data: validatedTransactions,
+            });
 
-            sendSuccessResponse(res, validatedTransactions);
+            sendSuccessResponse(res, createdTransactions);
         } catch (error) {
             sendErrorResponse(res, error.message || "Failed to process the Excel file.");
         }

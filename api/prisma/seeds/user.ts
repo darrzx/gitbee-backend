@@ -22,5 +22,11 @@ export const users = [
         email: "roger.laurent@binus.edu",
         name: "Roger Laurent",
         role: "HoP"
+    },
+    {
+        lecturer_code: "WB23-1",
+        email: "wilbert.c@binus.edu",
+        name: "Wilbert Coandadiputra",
+        role: "Lecturer"
     }
 ];

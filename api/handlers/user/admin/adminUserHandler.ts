@@ -156,7 +156,7 @@ export default class AdminUserHandler {
         }
     }
 
-    static async uploadExcel(req: Request, res: Response) {
+    static async uploadUserExcel(req: Request, res: Response) {
         try {
             if (!req.file) {
                 return sendErrorResponse(res, "No file uploaded.");
@@ -198,7 +198,7 @@ export default class AdminUserHandler {
         }
     }
 
-    static async removeDataExcel(req : Request, res : Response) {
+    static async removeUserExcel(req : Request, res : Response) {
         try {    
             const deletedUsers = await prisma.user.deleteMany({
                 where: {

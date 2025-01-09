@@ -260,6 +260,39 @@ export default class AdminUserHandler {
         }
     }
 
+    static async getAllTransaction(req : Request, res : Response) {
+        try {
+            const schema = z.object({
+                search: z.string().optional()
+            });
+
+            const validationResult = validateSchema(schema, req.query);
+            if (validationResult.error) {
+                return sendErrorResponse(res, validationResult.message ? validationResult.message : "Fetch Failed");
+            }
+
+            const params = validationResult.data;
+            const whereCondition = {
+                is_disable: 0,
+                ...(params.search && {
+                    OR: [
+                        { lecturer_code: { contains: params.search } },
+                        { lecturer_name: { contains: params.search } },
+                        { course_code: { contains: params.search } },
+                        { course_name: { contains: params.search } },
+                        { class: { contains: params.search } }
+                    ]
+                })
+            };
+            const classTransactions = await prisma.classTransaction.findMany({
+                where: whereCondition
+            });
+            sendSuccessResponse(res, classTransactions);
+        } catch (error) {
+            sendErrorResponse(res, error.message ? error.message : "Fetch Failed");
+        }
+    }
+
     static async uploadTransactionExcel(req: Request, res: Response) {
         try {
             if (!req.file) {

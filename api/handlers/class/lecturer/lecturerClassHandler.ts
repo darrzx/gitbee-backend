@@ -40,62 +40,30 @@ export default class LecturerClassHandler {
         }
     }
 
-    // static async lecturerClassTransaction(req : Request, res : Response) {
-    //     try {
-    //         const schema = z.object({
-    //             semester_id: z.string(),
-    //             lecturer_id: z.string()
-    //         });
+    static async lecturerClassTransaction(req : Request, res : Response) {
+        try {
+            const schema = z.object({
+                semester_id: z.string(),
+                lecturer_id: z.string()
+            });
     
-    //         const validationResult = validateSchema(schema, req.query);
-    //         if (validationResult.error) {
-    //             return sendErrorResponse(res, validationResult.message ? validationResult.message : "Invalid Parameters");
-    //         }
+            const validationResult = validateSchema(schema, req.query);
+            if (validationResult.error) {
+                return sendErrorResponse(res, validationResult.message ? validationResult.message : "Invalid Parameters");
+            }
     
-    //         const params = validationResult.data;
-    
-    //         const studentListTransactions = await prisma.studentListTransaction.findMany({
-    //             where: {
-    //                 semester_id: params.semester_id,
-    //                 course_code: params.course_id,
-    //                 class: params.class,
-    //                 student_id: params.student_id
-    //             }
-    //         });
+            const params = validationResult.data;
 
-    //         const classTransactions = await prisma.classTransaction.findMany({
-    //             where: {
-    //                 semester_id: params.semester_id,
-    //                 course_code: params.course_id,
-    //                 class: params.class,
-    //             }
-    //         });
-
-    //         const updatedStudentTransaction = studentListTransactions.map((studentData) => {
-    //             const classData = classTransactions.find(
-    //                 (classTransaction) =>
-    //                     classTransaction.class === studentData.class &&
-    //                     classTransaction.semester_id === studentData.semester_id &&
-    //                     classTransaction.course_code === studentData.course_code
-    //             );
+            const classTransactions = await prisma.classTransaction.findMany({
+                where: {
+                    semester_id: params.semester_id,
+                    lecturer_code: params.lecturer_id
+                }
+            });
     
-    //             return {
-    //                 id: studentData.id,
-    //                 semester_id: studentData.semester_id,
-    //                 student_id: studentData.student_id,
-    //                 student_name: studentData.student_name,
-    //                 class: studentData.class,
-    //                 lecturer_code: classData?.lecturer_code ?? null,
-    //                 lecturer_name: classData?.lecturer_name ?? null,
-    //                 course_code: classData?.course_code ?? null,
-    //                 course_name: classData?.course_name ?? null,
-    //                 location: classData?.location ?? null
-    //             };
-    //         });
-    
-    //         sendSuccessResponse(res, updatedStudentTransaction);
-    //     } catch (error) {
-    //         sendErrorResponse(res, error.message ? error.message : "Fetch Failed");
-    //     }
-    // }
+            sendSuccessResponse(res, classTransactions);
+        } catch (error) {
+            sendErrorResponse(res, error.message ? error.message : "Fetch Failed");
+        }
+    }
 }

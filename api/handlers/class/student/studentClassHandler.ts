@@ -11,8 +11,6 @@ export default class StudentClassHandler {
         try {
             const schema = z.object({
                 semester_id: z.string(),
-                course_id: z.string(),
-                class: z.string(),
                 student_id: z.string()
             });
     
@@ -26,17 +24,13 @@ export default class StudentClassHandler {
             const studentListTransactions = await prisma.studentListTransaction.findMany({
                 where: {
                     semester_id: params.semester_id,
-                    course_code: params.course_id,
-                    class: params.class,
                     student_id: params.student_id
                 }
             });
 
             const classTransactions = await prisma.classTransaction.findMany({
                 where: {
-                    semester_id: params.semester_id,
-                    course_code: params.course_id,
-                    class: params.class,
+                    semester_id: params.semester_id
                 }
             });
 

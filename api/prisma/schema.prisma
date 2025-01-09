@@ -225,3 +225,14 @@ model ClassTransaction {
 
   @@map("class_transaction")
 }
+
+model StudentListTransaction {
+  id                  Int                @id @default(autoincrement())
+  semester_name       String             @db.VarChar(150)
+  student_id          String             @db.VarChar(50)
+  student_name        String             @db.VarChar(150)
+  course_code         String             @db.VarChar(50)
+  class               String             @db.VarChar(50)
+
+  @@map("student_list_transaction")
+}

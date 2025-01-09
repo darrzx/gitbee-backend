@@ -273,7 +273,6 @@ export default class AdminUserHandler {
 
             const params = validationResult.data;
             const whereCondition = {
-                is_disable: 0,
                 ...(params.search && {
                     OR: [
                         { lecturer_code: { contains: params.search } },

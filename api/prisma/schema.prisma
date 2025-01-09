@@ -215,7 +215,7 @@ model HoPMajor {
 
 model ClassTransaction {
   id                  Int                @id @default(autoincrement())
-  semester_name       String             @db.VarChar(150)
+  semester_id         String             @db.VarChar(150)
   lecturer_code       String             @db.VarChar(50)
   lecturer_name       String             @db.VarChar(150)
   course_code         String             @db.VarChar(50)
@@ -228,7 +228,7 @@ model ClassTransaction {
 
 model StudentListTransaction {
   id                  Int                @id @default(autoincrement())
-  semester_name       String             @db.VarChar(150)
+  semester_id         String             @db.VarChar(150)
   student_id          String             @db.VarChar(50)
   student_name        String             @db.VarChar(150)
   course_code         String             @db.VarChar(50)

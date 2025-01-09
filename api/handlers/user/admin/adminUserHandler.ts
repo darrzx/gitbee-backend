@@ -4,6 +4,7 @@ import validateSchema from "api/utils/validator/validateSchema";
 import { sendErrorResponse, sendSuccessResponse } from "api/utils/response/response";
 import { PrismaClient } from "@prisma/client";
 import xlsx from "xlsx";
+import SemesterService from "api/services/semester/semesterService";
 
 const prisma = new PrismaClient();
 
@@ -299,7 +300,7 @@ export default class AdminUserHandler {
             }
 
             const schema = z.object({
-                semester_name: z.string(),
+                semester_id: z.string(),
                 lecturer_code: z.string(),
                 lecturer_name: z.string(), 
                 course_code: z.string(),
@@ -326,13 +327,18 @@ export default class AdminUserHandler {
                 }
             }
 
+            const semesterData = await SemesterService.getAllSemesterData();
+            const semesterId = semesterData.data.find(
+                (semester) => semester.Description === semesterName
+            );
+
             const uniqueCombinations = new Set<string>();
             
             // testing 20 data
             const firstTenRows = rows.slice(0, 20);
             const validatedTransactions = firstTenRows
                 .map((row) => ({
-                    semester_name: semesterName,
+                    semester_id: semesterId.SemesterID,
                     lecturer_code: row[3],
                     lecturer_name: row[2],
                     course_code: row[9],
@@ -341,7 +347,7 @@ export default class AdminUserHandler {
                     location: row[13]
                 }))
                 .filter((row) => {
-                    const uniqueKey = `${row.semester_name}|${row.lecturer_code}|${row.course_code}|${row.class}|${row.location}`;
+                    const uniqueKey = `${row.semester_id}|${row.lecturer_code}|${row.course_code}|${row.class}|${row.location}`;
                     
                     if (uniqueCombinations.has(uniqueKey)) {
                         return false;

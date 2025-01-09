@@ -26,6 +26,7 @@ async function main() {
     await prisma.role.deleteMany({});
     await prisma.class.deleteMany({});
     await prisma.hoPMajor.deleteMany({});
+    await prisma.studentListTransaction.deleteMany({});
 
     await prisma.$executeRaw`ALTER TABLE status AUTO_INCREMENT = 1`;
     await prisma.$executeRaw`ALTER TABLE category AUTO_INCREMENT = 1`;
@@ -41,6 +42,7 @@ async function main() {
     await prisma.$executeRaw`ALTER TABLE role AUTO_INCREMENT = 1`;
     await prisma.$executeRaw`ALTER TABLE class AUTO_INCREMENT = 1`;
     await prisma.$executeRaw`ALTER TABLE hop_major AUTO_INCREMENT = 1`;
+    await prisma.$executeRaw`ALTER TABLE student_list_transaction AUTO_INCREMENT = 1`;
 
     // Seed statuses
     await prisma.status.createMany({

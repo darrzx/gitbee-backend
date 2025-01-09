@@ -3,6 +3,6 @@ import StudentClassHandler from "api/handlers/class/student/studentClassHandler"
 
 const studentClassRoutes = express.Router();
 
-studentClassRoutes.get("/transaction", StudentClassHandler.checkFinalize);
+studentClassRoutes.get("/transaction", StudentClassHandler.studentClassTransaction);
 
 export default studentClassRoutes;

@@ -118,6 +118,7 @@ export default class LecturerProjectHandler {
         try {
             const schema = z.object({
                 semester_id: z.string().optional(),
+                lecturer_id: z.string(),
                 search: z.string().optional()
             });
 
@@ -138,6 +139,7 @@ export default class LecturerProjectHandler {
                 ...(params.semester_id && {
                     projectDetail: { semester_id: params.semester_id }
                 }),
+                lecturer_id: params.lecturer_id,
                 assessment: { isNot: null }
             };
             

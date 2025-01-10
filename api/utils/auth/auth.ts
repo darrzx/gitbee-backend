@@ -13,7 +13,7 @@ export const createToken = (
     username: string,
     name: string,
     email: string,
-    role: string,
+    role: string[],
     messier_id?: string
     ) => {
     const expire = Math.floor(Date.now() / 1000) + (60 * 60 * 24 * 7);

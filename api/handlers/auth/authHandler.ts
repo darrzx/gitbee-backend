@@ -51,7 +51,13 @@ export default class AuthHandler {
                     role: true,
                 },
             });
-            const role = user?.role ?? "Student";
+
+            const role = user?.role
+            ? user.role === "Lecturer"
+                ? ["Lecturer"]
+                : [user.role, "Lecturer"]
+            : ["Student"];
+
             const nim = user?.role != null ? user?.lecturer_code : atlantis.data.NIM;
 
             const token = createToken(

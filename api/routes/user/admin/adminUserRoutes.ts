@@ -15,4 +15,7 @@ adminUserRoutes.get("/get-transaction", AdminUserHandler.getAllTransaction);
 adminUserRoutes.post("/upload-transaction-excel", upload.single("file"), AdminUserHandler.uploadTransactionExcel);
 adminUserRoutes.patch("/remove-transaction-excel", AdminUserHandler.removeTransactionExcel);
 
+adminUserRoutes.post("/upload-student-excel", upload.single("file"), AdminUserHandler.uploadStudentExcel);
+adminUserRoutes.patch("/remove-student-excel", AdminUserHandler.removeStudentExcel);
+
 export default adminUserRoutes;

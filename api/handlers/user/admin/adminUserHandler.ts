@@ -380,4 +380,78 @@ export default class AdminUserHandler {
             sendErrorResponse(res, error.message ? error.message : "Remove Failed");
         }
     }
+
+    static async uploadStudentExcel(req: Request, res: Response) {
+        try {
+            if (!req.file) {
+                return sendErrorResponse(res, "No file uploaded.");
+            }
+
+            const schema = z.object({
+                semester_id: z.string(),
+                student_id: z.string(),
+                student_name: z.string(), 
+                course_code: z.string(),
+                class: z.string()
+            });
+
+            const workbook = xlsx.read(req.file.buffer, { type: "buffer" });
+            const sheetName = workbook.SheetNames[0];
+            const worksheet = workbook.Sheets[sheetName];
+            const rows: Record<string, any>[] = xlsx.utils.sheet_to_json(worksheet, { header: 1 }).slice(1);
+            const semesterRaw = rows[0][6];
+            let semesterName = "";
+            if (semesterRaw) {
+                const yearPart = Math.floor(semesterRaw / 100);
+                const termPart = semesterRaw % 100; 
+                const year = 2000 + yearPart;
+
+                if (termPart === 10) {
+                    semesterName = `Odd Semester ${year}/${year + 1}`;
+                } else if (termPart === 20) {
+                    semesterName = `Even Semester ${year}/${year + 1}`;
+                }
+            }
+
+            const semesterData = await SemesterService.getAllSemesterData();
+            const semesterId = semesterData.data.find(
+                (semester) => semester.Description === semesterName
+            );
+            
+            // testing 20 data
+            const firstTenRows = rows.slice(0, 20);
+            const validatedTransactions = firstTenRows
+                .map((row) => ({
+                    semester_id: semesterId.SemesterID,
+                    student_id: row[3].toString(),
+                    student_name: row[4],
+                    course_code: row[8],
+                    class: row[10]
+                }))
+                .filter((row) => schema.safeParse(row).success)
+                .filter((row) => row.class.startsWith("L"));
+
+            if (validatedTransactions.length === 0) {
+                return sendErrorResponse(res, "No valid rows found in the file.");
+            }
+    
+            const createdTransactions = await prisma.studentListTransaction.createMany({
+                data: validatedTransactions,
+            });
+
+            sendSuccessResponse(res, createdTransactions);
+        } catch (error) {
+            sendErrorResponse(res, error.message || "Failed to process the Excel file.");
+        }
+    }
+
+    static async removeStudentExcel(req : Request, res : Response) {
+        try {    
+            const deletedTransactions = await prisma.studentListTransaction.deleteMany({});
+    
+            sendSuccessResponse(res, deletedTransactions);
+        } catch (error) {
+            sendErrorResponse(res, error.message ? error.message : "Remove Failed");
+        }
+    }
 }

@@ -25,8 +25,6 @@ export default class AuthHandler {
 
             const email = decodedToken.preferred_username || decodedToken.unique_name;
             const name = decodedToken.name;
-            console.log(name);
-            console.log(email);
 
             if (!email || !name) {
                 return sendErrorResponse(res, "Invalid token: Missing email or name", 400);
@@ -53,10 +51,7 @@ export default class AuthHandler {
                     role: true,
                 },
             });
-            console.log(user)
-            console.log(user?.role)
             const role = user?.role ?? "Student";
-            console.log(role)
 
             const token = createToken(
                 nim,

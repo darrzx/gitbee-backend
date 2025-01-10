@@ -61,4 +61,33 @@ export default class StudentClassHandler {
             sendErrorResponse(res, error.message ? error.message : "Fetch Failed");
         }
     }
+
+    static async studentListInClass(req : Request, res : Response) {
+        try {
+            const schema = z.object({
+                semester_id: z.string(),
+                class: z.string(),
+                course_id: z.string()
+            });
+    
+            const validationResult = validateSchema(schema, req.query);
+            if (validationResult.error) {
+                return sendErrorResponse(res, validationResult.message ? validationResult.message : "Invalid Parameters");
+            }
+    
+            const params = validationResult.data;
+
+            const studentLists = await prisma.studentListTransaction.findMany({
+                where: {
+                    semester_id: params.semester_id,
+                    class: params.class,
+                    course_code: params.course_id
+                }
+            });
+    
+            sendSuccessResponse(res, studentLists);
+        } catch (error) {
+            sendErrorResponse(res, error.message ? error.message : "Fetch Failed");
+        }
+    }
 }

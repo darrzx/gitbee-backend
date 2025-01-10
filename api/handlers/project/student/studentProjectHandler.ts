@@ -86,8 +86,16 @@ export default class StudentProjectHandler {
                     projectTechnologies: updatedProjectTechnologies
                 };
             }));
+            
+            const classTransactions = await prisma.classTransaction.findFirst({
+                where: {
+                    semester_id: params.semester_id,
+                    course_code: params.course_id,
+                    class: params.class
+                }
+            });
 
-            sendSuccessResponse(res, updatedProjects);
+            sendSuccessResponse(res, {updatedProjects, classTransactions});
         } catch (error) {
             sendErrorResponse(res, error.message ? error.message : "Fetch Failed");
         }

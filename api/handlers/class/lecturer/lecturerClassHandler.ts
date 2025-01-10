@@ -44,7 +44,8 @@ export default class LecturerClassHandler {
         try {
             const schema = z.object({
                 semester_id: z.string(),
-                lecturer_id: z.string()
+                lecturer_id: z.string(),
+                course_id: z.string().optional()
             });
     
             const validationResult = validateSchema(schema, req.query);
@@ -57,7 +58,8 @@ export default class LecturerClassHandler {
             const classTransactions = await prisma.classTransaction.findMany({
                 where: {
                     semester_id: params.semester_id,
-                    lecturer_code: params.lecturer_id
+                    lecturer_code: params.lecturer_id,
+                    ...(params.course_id ? { course_code: params.course_id } : {})
                 }
             });
     

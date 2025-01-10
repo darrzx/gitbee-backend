@@ -54,20 +54,14 @@ export default class LecturerClassHandler {
     
             const params = validationResult.data;
 
-            const classTransactions = await prisma.classTransaction.groupBy({
-                by: ['course_code', 'course_name'],
+            const classTransactions = await prisma.classTransaction.findMany({
                 where: {
                     semester_id: params.semester_id,
                     lecturer_code: params.lecturer_id
                 }
             });
-
-            const listCourses = classTransactions.map((transaction) => ({
-                course_code: transaction.course_code,
-                course_name: transaction.course_name
-            }));
     
-            sendSuccessResponse(res, listCourses);
+            sendSuccessResponse(res, classTransactions);
         } catch (error) {
             sendErrorResponse(res, error.message ? error.message : "Fetch Failed");
         }
@@ -87,47 +81,20 @@ export default class LecturerClassHandler {
     
             const params = validationResult.data;
 
-            const listCourses = await prisma.classTransaction.findMany({
+            const classTransactions = await prisma.classTransaction.groupBy({
+                by: ['course_code', 'course_name'],
                 where: {
                     semester_id: params.semester_id,
                     lecturer_code: params.lecturer_id
-                },
-                select: {
-                    course_code: true,
-                    course_name: true
                 }
             });
+
+            const listCourses = classTransactions.map((transaction) => ({
+                course_code: transaction.course_code,
+                course_name: transaction.course_name
+            }));
     
             sendSuccessResponse(res, listCourses);
-        } catch (error) {
-            sendErrorResponse(res, error.message ? error.message : "Fetch Failed");
-        }
-    }
-
-    static async studentListInClass(req : Request, res : Response) {
-        try {
-            const schema = z.object({
-                semester_id: z.string(),
-                class: z.string(),
-                course_id: z.string(),
-                lecturer_id: z.string()
-            });
-    
-            const validationResult = validateSchema(schema, req.query);
-            if (validationResult.error) {
-                return sendErrorResponse(res, validationResult.message ? validationResult.message : "Invalid Parameters");
-            }
-    
-            const params = validationResult.data;
-
-            const classTransactions = await prisma.classTransaction.findMany({
-                where: {
-                    semester_id: params.semester_id,
-                    lecturer_code: params.lecturer_id
-                }
-            });
-    
-            sendSuccessResponse(res, classTransactions);
         } catch (error) {
             sendErrorResponse(res, error.message ? error.message : "Fetch Failed");
         }

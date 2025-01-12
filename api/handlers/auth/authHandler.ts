@@ -49,7 +49,7 @@ export default class AuthHandler {
                 select: {
                     lecturer_code: true,
                     email: true,
-                    role: true,
+                    role: true
                 },
             });
 
@@ -61,13 +61,32 @@ export default class AuthHandler {
 
             const nim = user?.role != null ? user?.lecturer_code : atlantis.data.NIM;
 
+            let activeRole = null;
+            if (valid.data.role) {
+                const checkedUser = await prisma.user.findFirst({
+                    where: {
+                        OR: [
+                            { email: email }, 
+                            { lecturer_code: lecturer_code },
+                        ],
+                    },
+                    select: {
+                        role: true
+                    },
+                });
+
+                if(checkedUser) {
+                    activeRole === valid.data.role;
+                }
+            }
+
             const token = createToken(
                 nim,
                 username,
                 name.toLowerCase(),
                 email.toLowerCase(),
                 role,
-                valid.data.role
+                activeRole
             );
 
             return sendSuccessResponse(res, {

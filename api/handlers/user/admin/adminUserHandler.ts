@@ -381,6 +381,37 @@ export default class AdminUserHandler {
         }
     }
 
+    static async getAllStudent(req : Request, res : Response) {
+        try {
+            const schema = z.object({
+                search: z.string().optional()
+            });
+
+            const validationResult = validateSchema(schema, req.query);
+            if (validationResult.error) {
+                return sendErrorResponse(res, validationResult.message ? validationResult.message : "Fetch Failed");
+            }
+
+            const params = validationResult.data;
+            const whereCondition = {
+                ...(params.search && {
+                    OR: [
+                        { student_id: { contains: params.search } },
+                        { student_name: { contains: params.search } },
+                        { course_code: { contains: params.search } },
+                        { class: { contains: params.search } }
+                    ]
+                })
+            };
+            const studentTransactions = await prisma.studentListTransaction.findMany({
+                where: whereCondition
+            });
+            sendSuccessResponse(res, studentTransactions);
+        } catch (error) {
+            sendErrorResponse(res, error.message ? error.message : "Fetch Failed");
+        }
+    }
+
     static async uploadStudentExcel(req: Request, res: Response) {
         try {
             if (!req.file) {

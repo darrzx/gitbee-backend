@@ -88,7 +88,9 @@ export default class AuthHandler {
                 name.toLowerCase(),
                 email.toLowerCase(),
                 role,
-                activeRole
+                microsoftToken,
+                "",
+                activeRole,
             );
 
             return sendSuccessResponse(res, {
@@ -97,7 +99,8 @@ export default class AuthHandler {
                 Name: name.toUpperCase(),
                 Email: email.toLowerCase(),
                 Role: role,
-                ActiveRole: activeRole
+                ActiveRole: activeRole,
+                MicrosoftToken: microsoftToken
             }, {
                 name: process.env.COOKIE_NAME,
                 value: token.token,

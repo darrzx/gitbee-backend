@@ -76,8 +76,10 @@ export default class AuthHandler {
                 });
 
                 if(checkedUser) {
-                    activeRole === valid.data.role;
+                    activeRole = valid.data.role;
                 }
+            } else {
+                activeRole = user?.role ? "Lecturer": "Student";
             }
 
             const token = createToken(
@@ -95,6 +97,7 @@ export default class AuthHandler {
                 Name: name.toUpperCase(),
                 Email: email.toLowerCase(),
                 Role: role,
+                ActiveRole: activeRole
             }, {
                 name: process.env.COOKIE_NAME,
                 value: token.token,

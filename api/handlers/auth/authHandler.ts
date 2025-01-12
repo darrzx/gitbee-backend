@@ -12,6 +12,7 @@ export default class AuthHandler {
     static async login(req: Request, res: Response) {
         const schema = z.object({
             microsoft_token: z.string(),
+            role: z.string().optional()
         });
 
         const valid = schema.safeParse(req.body);
@@ -65,7 +66,8 @@ export default class AuthHandler {
                 username,
                 name.toLowerCase(),
                 email.toLowerCase(),
-                role
+                role,
+                valid.data.role
             );
 
             return sendSuccessResponse(res, {

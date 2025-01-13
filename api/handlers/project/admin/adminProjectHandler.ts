@@ -8,7 +8,7 @@ import { formatProjects } from "api/utils/formatter/formatterProject";
 const prisma = new PrismaClient();
 
 export default class AdminProjectHandler { 
-    static async getAllProject(req: Request, res: Response, next: NextFunction) {
+    static async getAdminDashboard(req: Request, res: Response, next: NextFunction) {
         try {
             const schema = z.object({
                 search: z.string().optional(),

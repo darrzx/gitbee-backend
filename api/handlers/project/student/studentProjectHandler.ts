@@ -101,7 +101,7 @@ export default class StudentProjectHandler {
         }
     }
 
-    static async getAllStudentProject(req: Request, res: Response, next: NextFunction) {
+    static async getAllStudentProfileProject(req: Request, res: Response, next: NextFunction) {
         try {
             const schema = z.object({
                 student_id: z.string()

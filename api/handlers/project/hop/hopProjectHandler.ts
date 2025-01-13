@@ -8,7 +8,7 @@ import { formatProjects } from "api/utils/formatter/formatterProject";
 const prisma = new PrismaClient();
 
 export default class HopProjectHandler {
-    static async getAllProject(req: Request, res: Response, next: NextFunction) {
+    static async getHoPDashboard(req: Request, res: Response, next: NextFunction) {
         try {
             const schema = z.object({
                 major_id: z.string(),

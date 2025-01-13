@@ -4,6 +4,5 @@ import SccReviewedProjectHandler from "api/handlers/reviewedProject/scc/sccRevie
 const sccReviewedProjectRoutes = express.Router();
 
 sccReviewedProjectRoutes.post("/insert", SccReviewedProjectHandler.insertReviewedProject);
-sccReviewedProjectRoutes.patch("/remove", SccReviewedProjectHandler.removeReviewedProject);
 
 export default sccReviewedProjectRoutes;

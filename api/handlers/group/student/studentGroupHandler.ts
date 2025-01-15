@@ -25,6 +25,59 @@ export default class StudentGroupHandler {
             const params = validationResult.data;
             const studentIds = Array.isArray(params.student_ids) ? params.student_ids : [params.student_ids];
 
+            const existingInTemporaryGroup = await prisma.temporaryGroup.findMany({
+                where: {
+                    semester_id: params.semester_id,
+                    course_id: params.course_id,
+                    class: params.class,
+                    student_id: { in: studentIds },
+                },
+                select: {
+                    student_id: true,
+                },
+            });
+
+            const existingInProjectGroup = await prisma.project.findMany({
+                where: {
+                    projectDetail: {
+                        semester_id: params.semester_id,
+                        course_id: params.course_id,
+                        class: params.class,
+                    },
+                    projectGroups: {
+                        some: { student_id: { in: studentIds } },
+                    },
+                },
+                select: {
+                    projectGroups: {
+                        select: {
+                            student_id: true,
+                        },
+                    },
+                },
+            });
+
+            const studentsInTemporaryGroup = new Set(
+                existingInTemporaryGroup.map((entry) => entry.student_id)
+            );
+            const studentsInProjectGroup = new Set(
+                existingInProjectGroup.flatMap((project) =>
+                    project.projectGroups.map((group) => group.student_id)
+                )
+            );
+    
+            const conflictingStudents = Array.from(new Set([
+                ...studentsInTemporaryGroup,
+                ...studentsInProjectGroup,
+            ]));
+    
+            if (conflictingStudents.length > 0) {
+                return sendErrorResponse(
+                    res,
+                    `One Of The Group Members Has Already Created A Group`
+                );
+            }
+
             const existingTemporaryGroups = await prisma.temporaryGroup.findMany({
                 where: {
                     semester_id: params.semester_id,

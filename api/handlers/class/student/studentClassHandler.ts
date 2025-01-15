@@ -84,8 +84,48 @@ export default class StudentClassHandler {
                     course_code: params.course_id
                 }
             });
+
+            const groupedStudents = await prisma.temporaryGroup.findMany({
+                where: {
+                    semester_id: params.semester_id,
+                    course_id: params.course_id,
+                    class: params.class,
+                },
+                select: { student_id: true }
+            });
+
+            const projectsWithDetailsAndGroups = await prisma.project.findMany({
+                where: {
+                    projectDetail: {
+                        semester_id: params.semester_id,
+                        course_id: params.course_id,
+                        class: params.class,
+                    },
+                },
+                include: {
+                    projectGroups: {
+                        select: { student_id: true },
+                    },
+                    projectDetail: true, 
+                },
+            });
     
-            sendSuccessResponse(res, studentLists);
+            const groupedStudentIds = new Set(groupedStudents.map((g) => g.student_id));
+            const projectStudentIds = new Set(
+                projectsWithDetailsAndGroups.flatMap((project) =>
+                    project.projectGroups.map((group) => group.student_id)
+                )
+            );
+
+            const studentListsWithDisableFlag = studentLists.map((student) => ({
+                ...student,
+                is_disable:
+                    groupedStudentIds.has(student.student_id) || projectStudentIds.has(student.student_id)
+                        ? 1
+                        : 0,
+            }));
+
+            sendSuccessResponse(res, studentListsWithDisableFlag);
         } catch (error) {
             sendErrorResponse(res, error.message ? error.message : "Fetch Failed");
         }

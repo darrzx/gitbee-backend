@@ -13,6 +13,7 @@ export default class SccProjectHandler {
             const schema = z.object({
                 major_id: z.string().optional(),
                 semester_id: z.string(),
+                is_recommended: z.string().optional(),
                 search: z.string().optional()
             });
     
@@ -22,8 +23,25 @@ export default class SccProjectHandler {
             }
     
             const params = validationResult.data;
-            const searchCondition = params.search ? { title: { contains: params.search } } : {};
+            const searchCondition = params.search
+            ? {
+                  OR: [
+                      { projectDetail: { title: { contains: params.search }}}, 
+                      {
+                          projectGroups: {
+                              some: {
+                                  OR: [
+                                      { student_id: { contains: params.search } }, 
+                                      { student_name: { contains: params.search } } 
+                                  ]
+                              }
+                          }
+                      }
+                  ]
+              }
+            : {};                       
             const majorCondition = params.major_id ? { major_id: Number(params.major_id) } : {};
+            const isRecommendedCondition = params.is_recommended ? { is_recommended: Number(params.is_recommended) } : {};
 
             const [reviewedProjects, notReviewedProjects] = await Promise.all([
                 prisma.project.findMany({
@@ -32,8 +50,9 @@ export default class SccProjectHandler {
                             semester_id: params.semester_id,
                             ...majorCondition,
                             status_id: { gte: 3 },
-                            ...searchCondition
-                        }
+                        },
+                        ...searchCondition,
+                        ...(isRecommendedCondition ? { reviewedProject: isRecommendedCondition } : {}),
                     },
                     include: {
                         projectDetail: true,
@@ -55,9 +74,9 @@ export default class SccProjectHandler {
                             semester_id: params.semester_id,
                             ...majorCondition,
                             status_id: 2,
-                            ...searchCondition
                         },
-                        assessment: { grade: { gte: 4 } }
+                        assessment: { grade: { gte: 4 } },
+                        ...searchCondition
                     },
                     include: {
                         projectDetail: true,

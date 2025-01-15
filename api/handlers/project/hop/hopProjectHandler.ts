@@ -13,6 +13,7 @@ export default class HopProjectHandler {
             const schema = z.object({
                 major_id: z.string(),
                 semester_id: z.string(),
+                is_outstanding: z.string().optional(),
                 search: z.string().optional()
             });
     
@@ -22,17 +23,35 @@ export default class HopProjectHandler {
             }
     
             const params = validationResult.data;
-            const searchCondition = params.search ? { title: { contains: params.search } } : {};
-    
+            const searchCondition = params.search
+            ? {
+                  OR: [
+                      { projectDetail: { title: { contains: params.search }}}, 
+                      {
+                          projectGroups: {
+                              some: {
+                                  OR: [
+                                      { student_id: { contains: params.search } }, 
+                                      { student_name: { contains: params.search } } 
+                                  ]
+                              }
+                          }
+                      }
+                  ]
+              }
+            : {};            
+            const isOutstandingCondition = params.is_outstanding ? { is_outstanding: Number(params.is_outstanding) } : {};
+
             const [reviewedProjects, notReviewedProjects] = await Promise.all([
                 prisma.project.findMany({
                     where: {
                         projectDetail: {
                             semester_id: params.semester_id,
                             major_id: Number(params.major_id),
-                            status_id: 4,
-                            ...searchCondition
-                        }
+                            status_id: 4
+                        },
+                        ...(isOutstandingCondition ? { outstandingProject: isOutstandingCondition } : {}),
+                        ...searchCondition
                     },
                     include: {
                         projectDetail: true,
@@ -53,10 +72,10 @@ export default class HopProjectHandler {
                         projectDetail: {
                             semester_id: params.semester_id,
                             major_id: Number(params.major_id),
-                            status_id: 3,
-                            ...searchCondition
+                            status_id: 3
                         },
-                        reviewedProject: { is_recommended: 1 }
+                        reviewedProject: { is_recommended: 1 },
+                        ...searchCondition
                     },
                     include: {
                         projectDetail: true,

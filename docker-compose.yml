@@ -7,5 +7,5 @@ services:
     ports:
       - "5000:5000"  
     command: >
-      sh -c "cd api && npx prisma generate && npm run dev"
+      sh -c "cd api && npx prisma db push && npx prisma generate && npx prisma db seed && npm run dev"
     restart: always

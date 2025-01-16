@@ -1,13 +1,20 @@
-FROM node:18-alpine
+FROM node
 
-# Create app directory
-WORKDIR /usr/src/app
+WORKDIR /app
 
 COPY package*.json ./
 
 RUN npm install
-COPY . . 
+
+COPY . .
+
+WORKDIR /app/src
+RUN npx prisma generate
+
+WORKDIR /app
+RUN npm run build
+
+
 EXPOSE 5000
 
-RUN npx prisma generate
-CMD [ "npm", "run", "dev" ]
+CMD ["npm","run" ,"dev"]

@@ -8,7 +8,7 @@ RUN npm install
 
 COPY . .
 
-WORKDIR /app/src
+WORKDIR /app/api
 RUN npx prisma generate
 
 WORKDIR /app

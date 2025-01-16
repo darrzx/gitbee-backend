@@ -42,30 +42,4 @@ export default class HopOutstandingProjectHandler {
             sendErrorResponse(res, error.message ? error.message : "Insert Failed");
         }
     }
-
-    static async removeOutstandingProject(req : Request, res : Response, next : NextFunction) {
-        try {
-            const schema = z.object({
-                project_id: z.string()
-            });
-    
-            const validationResult = validateSchema(schema, req.query);
-            if (validationResult.error) {
-                return sendErrorResponse(res, validationResult.message ? validationResult.message : "Invalid Parameters");
-            }
-    
-            const params = validationResult.data;
-            const whereCondition = {
-                project_id: Number(params.project_id)
-            };
-    
-            const deletedReviewedProject = await prisma.outstandingProject.delete({
-                where: whereCondition
-            });
-    
-            sendSuccessResponse(res, deletedReviewedProject);
-        } catch (error) {
-            sendErrorResponse(res, error.message ? error.message : "Delete Failed");
-        }
-    }
 }

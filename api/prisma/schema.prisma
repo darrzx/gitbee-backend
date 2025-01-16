@@ -59,6 +59,7 @@ model ProjectDetail {
   github_link       String          @db.Text
   project_link      String          @db.Text
   documentation     String          @db.MediumText
+  video_link        String?         @db.MediumText
   description       String          @db.Text
   thumbnail         String          @db.MediumText
   status_id         Int

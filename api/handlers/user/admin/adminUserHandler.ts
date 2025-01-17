@@ -232,9 +232,9 @@ export default class AdminUserHandler {
             const firstTenRows = rows.slice(0, 20);
             const validatedUsers = firstTenRows
                 .map((row) => ({
-                    lecturer_code: row[3],    
-                    name: row[2],             
-                    email: row[2],            
+                    lecturer_code: row[2],    
+                    name: row[1],             
+                    email: row[1],            
                     role: "Lecturer",       
                 }))
                 .filter((row) => schema.safeParse(row).success);
@@ -350,12 +350,12 @@ export default class AdminUserHandler {
             const validatedTransactions = firstTenRows
                 .map((row) => ({
                     semester_id: semesterId.SemesterID,
-                    lecturer_code: row[3],
-                    lecturer_name: row[2],
-                    course_code: row[9],
-                    course_name: row[10],
-                    class: row[11],
-                    location: row[13]
+                    lecturer_code: row[2],
+                    lecturer_name: row[1],
+                    course_code: row[3],
+                    course_name: row[4],
+                    class: row[5],
+                    location: row[6]
                 }))
                 .filter((row) => {
                     const uniqueKey = `${row.semester_id}|${row.lecturer_code}|${row.course_code}|${row.class}|${row.location}`;
@@ -441,7 +441,7 @@ export default class AdminUserHandler {
             const sheetName = workbook.SheetNames[0];
             const worksheet = workbook.Sheets[sheetName];
             const rows: Record<string, any>[] = xlsx.utils.sheet_to_json(worksheet, { header: 1 }).slice(1);
-            const semesterRaw = rows[0][6];
+            const semesterRaw = rows[0][2];
             let semesterName = "";
             if (semesterRaw) {
                 const yearPart = Math.floor(semesterRaw / 100);
@@ -465,10 +465,10 @@ export default class AdminUserHandler {
             const validatedTransactions = firstTenRows
                 .map((row) => ({
                     semester_id: semesterId.SemesterID,
-                    student_id: row[3].toString(),
-                    student_name: row[4],
-                    course_code: row[8],
-                    class: row[10]
+                    student_id: row[0].toString(),
+                    student_name: row[1],
+                    course_code: row[3],
+                    class: row[4]
                 }))
                 .filter((row) => schema.safeParse(row).success)
                 .filter((row) => row.class.startsWith("L"));

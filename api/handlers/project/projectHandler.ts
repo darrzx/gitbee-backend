@@ -159,7 +159,6 @@ export default class ProjectHandler {
         }
     }
 
-    // semester belum ke filter
     static async getAllProject(req : Request, res : Response, next : NextFunction) {
         try {
             const schema = z.object({

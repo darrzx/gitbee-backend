@@ -94,12 +94,38 @@ export default class HopProjectHandler {
     
             const formattedReviewedProjects = await formatProjects(reviewedProjects);
             const formattedNotReviewedProjects = await formatProjects(notReviewedProjects);
+
+            const finalReviewedProjects = await Promise.all(
+                formattedReviewedProjects.map(async (project) => {
+                    const lecturer = await prisma.user.findUnique({
+                        where: { lecturer_code: project.lecturer_id }
+                    });
+    
+                    return {
+                        ...project,
+                        lecturer_name: lecturer ? lecturer.name : null
+                    };
+                })
+            );
+    
+            const finalNotReviewedProjects = await Promise.all(
+                formattedNotReviewedProjects.map(async (project) => {
+                    const lecturer = await prisma.user.findUnique({
+                        where: { lecturer_code: project.lecturer_id }
+                    });
+    
+                    return {
+                        ...project,
+                        lecturer_name: lecturer ? lecturer.name : null
+                    };
+                })
+            );
     
             const response = {
-                "count reviewed": formattedReviewedProjects.length,
-                "count not reviewed": formattedNotReviewedProjects.length,
-                "reviewed": formattedReviewedProjects,
-                "not reviewed": formattedNotReviewedProjects
+                "count reviewed": finalReviewedProjects.length,
+                "count not reviewed": finalNotReviewedProjects.length,
+                "reviewed": finalReviewedProjects,
+                "not reviewed": finalNotReviewedProjects
             };
     
             sendSuccessResponse(res, response);

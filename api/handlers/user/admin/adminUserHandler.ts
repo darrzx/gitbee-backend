@@ -35,6 +35,7 @@ export default class AdminUserHandler {
             let scc = null;
             let hop = null;
             let lecturer = null;
+            let admin = null;
 
             if (params.roleFilter === "SCC" || !params.roleFilter) {
                 scc = await prisma.user.findMany({
@@ -82,11 +83,21 @@ export default class AdminUserHandler {
                     }
                 });
             }
+
+            if (params.roleFilter === "Admin" || !params.roleFilter) {
+                admin = await prisma.user.findMany({
+                    where: {
+                        role: "Admin",
+                        ...searchCondition
+                    }
+                });
+            }
     
             const response = {
                 scc,
                 hop,
-                lecturer
+                lecturer,
+                admin
             };
     
             sendSuccessResponse(res, response);

@@ -100,10 +100,30 @@ export default class HopProjectHandler {
                     const lecturer = await prisma.user.findUnique({
                         where: { lecturer_code: project.lecturer_id }
                     });
+
+                    const major = await prisma.major.findUnique({
+                        where: { id: project.projectDetail.major_id }
+                    });
+
+                    const category = await prisma.category.findUnique({
+                        where: { id: project.projectDetail.category_id }
+                    });
+
+                    const course = await prisma.classTransaction.findFirst({
+                        where: { 
+                            course_code: project.projectDetail.course_id 
+                        }
+                    });
     
                     return {
                         ...project,
-                        lecturer_name: lecturer ? lecturer.name : null
+                        lecturer_name: lecturer ? lecturer.name : null,
+                        projectDetail: {
+                            ...project.projectDetail,
+                            major_name: major ? major.name : null,
+                            category_name: category ? category.name : null,
+                            course_name: course ? course.course_name : null
+                        },
                     };
                 })
             );
@@ -114,9 +134,29 @@ export default class HopProjectHandler {
                         where: { lecturer_code: project.lecturer_id }
                     });
     
+                    const major = await prisma.major.findUnique({
+                        where: { id: project.projectDetail.major_id }
+                    });
+
+                    const category = await prisma.category.findUnique({
+                        where: { id: project.projectDetail.category_id }
+                    });
+    
+                    const course = await prisma.classTransaction.findFirst({
+                        where: { 
+                            course_code: project.projectDetail.course_id 
+                        }
+                    });
+    
                     return {
                         ...project,
-                        lecturer_name: lecturer ? lecturer.name : null
+                        lecturer_name: lecturer ? lecturer.name : null,
+                        projectDetail: {
+                            ...project.projectDetail,
+                            major_name: major ? major.name : null,
+                            category_name: category ? category.name : null,
+                            course_name: course ? course.course_name : null
+                        },
                     };
                 })
             );

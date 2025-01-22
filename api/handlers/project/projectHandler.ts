@@ -203,8 +203,33 @@ export default class ProjectHandler {
                     projectDetail: true,
                     projectGroups: true,
                     galleries: true,
-                    projectTechnologies: true
-                }
+                    projectTechnologies: true,
+                    outstandingProject: true,
+                    reviewedProject: true,
+                    assessment: true
+                },
+                orderBy: [
+                    {
+                        projectDetail: {
+                            status_id: 'desc' 
+                        }
+                    },
+                    {
+                        outstandingProject: {
+                            is_outstanding: 'desc'
+                        }
+                    },
+                    {
+                        reviewedProject: {
+                            is_recommended: 'desc'
+                        }
+                    },
+                    {
+                        assessment: {
+                            grade: 'desc'
+                        }
+                    }
+                ]
             });
 
             const updatedProjects = await Promise.all(projects.map(async (project) => {

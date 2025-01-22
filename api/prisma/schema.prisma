@@ -22,6 +22,7 @@ model User {
   created_at          DateTime           @default(now())
   hopMajors           HoPMajor[]
 
+  @@unique([lecturer_code, name])
   @@map("user")
 }
 
@@ -224,6 +225,7 @@ model ClassTransaction {
   class               String             @db.VarChar(50)
   location            String             @db.VarChar(50)
 
+  @@unique([semester_id, lecturer_code, course_code, class])
   @@map("class_transaction")
 }
 
@@ -235,5 +237,6 @@ model StudentListTransaction {
   course_code         String             @db.VarChar(50)
   class               String             @db.VarChar(50)
 
+  @@unique([semester_id, student_id, course_code, class])
   @@map("student_list_transaction")
 }

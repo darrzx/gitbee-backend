@@ -245,7 +245,7 @@ export default class AdminUserHandler {
     
             const createdUsers = await prisma.user.createMany({
                 data: validatedUsers,
-                skipDuplicates: true,
+                skipDuplicates: true
             });
 
             sendSuccessResponse(res, createdUsers);
@@ -374,6 +374,7 @@ export default class AdminUserHandler {
     
             const createdTransactions = await prisma.classTransaction.createMany({
                 data: validatedTransactions,
+                skipDuplicates: true
             });
 
             sendSuccessResponse(res, createdTransactions);
@@ -441,6 +442,7 @@ export default class AdminUserHandler {
             const sheetName = workbook.SheetNames[0];
             const worksheet = workbook.Sheets[sheetName];
             const rows: Record<string, any>[] = xlsx.utils.sheet_to_json(worksheet, { header: 1 }).slice(1);
+
             const semesterRaw = rows[0][2];
             let semesterName = "";
             if (semesterRaw) {
@@ -459,6 +461,10 @@ export default class AdminUserHandler {
             const semesterId = semesterData.data.find(
                 (semester) => semester.Description === semesterName
             );
+
+            if (!semesterId) {
+                return sendErrorResponse(res, "Invalid semester information.");
+            }
             
             // testing 20 data
             const firstTenRows = rows.slice(0, 20);
@@ -479,6 +485,7 @@ export default class AdminUserHandler {
     
             const createdTransactions = await prisma.studentListTransaction.createMany({
                 data: validatedTransactions,
+                skipDuplicates: true
             });
 
             sendSuccessResponse(res, createdTransactions);

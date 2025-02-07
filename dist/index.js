@@ -23,7 +23,9 @@ const corsOptions = {
     optionsSuccessStatus: 200
 };
 app.use((0, cors_1.default)(corsOptions));
-app.use(bodyParser.json());
+// app.use(bodyParser.json());
+app.use(express_1.default.json({ limit: '100mb' }));
+app.use(express_1.default.urlencoded({ limit: '100mb', extended: true }));
 const port = process.env.PORT || 5000;
 app.set('query parser', function (str) {
     return qs_1.default.parse(str);

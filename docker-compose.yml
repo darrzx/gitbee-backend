@@ -5,7 +5,30 @@ services:
       context: .
       dockerfile: Dockerfile
     ports:
-      - "5000:5000"  
+      - "5000:5000"
     command: >
-      sh -c "cd api && npx prisma db push && npx prisma generate && npx prisma db seed && npm run dev"
+      sh -c "cd /app/api && npx prisma db push && npx prisma generate && npx prisma db seed && npm run dev"
     restart: always
+    environment:
+      DATABASE_URL: "mysql://root:admin@mysql:3306/gitbee"
+    depends_on:
+      - mysql
+    volumes:
+      - .:/app
+
+  mysql:
+    image: mysql:8.0
+    container_name: mysql_local
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: admin
+      MYSQL_DATABASE: gitbee
+      MYSQL_USER: root
+      MYSQL_PASSWORD: admin
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+
+volumes:
+  mysql_data:

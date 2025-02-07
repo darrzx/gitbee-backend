@@ -1,0 +1,22 @@
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const express_1 = __importDefault(require("express"));
+const adminUserHandler_1 = __importDefault(require("api/handlers/user/admin/adminUserHandler"));
+const multer_1 = __importDefault(require("multer"));
+const upload = (0, multer_1.default)({ storage: multer_1.default.memoryStorage() });
+const adminUserRoutes = express_1.default.Router();
+adminUserRoutes.get("/get-user", adminUserHandler_1.default.getUser);
+adminUserRoutes.post("/insert-user", adminUserHandler_1.default.insertUser);
+adminUserRoutes.patch("/update-role", adminUserHandler_1.default.updateRole);
+adminUserRoutes.post("/upload-user-excel", upload.single("file"), adminUserHandler_1.default.uploadUserExcel);
+adminUserRoutes.patch("/remove-user-excel", adminUserHandler_1.default.removeUserExcel);
+adminUserRoutes.get("/get-transaction", adminUserHandler_1.default.getAllTransaction);
+adminUserRoutes.post("/upload-transaction-excel", upload.single("file"), adminUserHandler_1.default.uploadTransactionExcel);
+adminUserRoutes.patch("/remove-transaction-excel", adminUserHandler_1.default.removeTransactionExcel);
+adminUserRoutes.get("/get-student", adminUserHandler_1.default.getAllStudent);
+adminUserRoutes.post("/upload-student-excel", upload.single("file"), adminUserHandler_1.default.uploadStudentExcel);
+adminUserRoutes.patch("/remove-student-excel", adminUserHandler_1.default.removeStudentExcel);
+exports.default = adminUserRoutes;

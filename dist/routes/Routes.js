@@ -4,7 +4,20 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
+const authRoutes_1 = __importDefault(require("./auth/authRoutes"));
 const semesterRoutes_1 = __importDefault(require("./semester/semesterRoutes"));
+const projectRoutes_1 = __importDefault(require("./project/projectRoutes"));
+const statusRoutes_1 = __importDefault(require("./status/statusRoutes"));
+const categoryRoutes_1 = __importDefault(require("./category/categoryRoutes"));
+const technologyRoutes_1 = __importDefault(require("./technology/technologyRoutes"));
+const majorRoutes_1 = __importDefault(require("./major/majorRoutes"));
+const userRoutes_1 = __importDefault(require("./user/userRoutes"));
+const groupRoutes_1 = __importDefault(require("./group/groupRoutes"));
+const assessmentRoutes_1 = __importDefault(require("./assessment/assessmentRoutes"));
+const classRoutes_1 = __importDefault(require("./class/classRoutes"));
+const reviewedProjectRoutes_1 = __importDefault(require("./reviewedProject/reviewedProjectRoutes"));
+const outstandingProjectRoutes_1 = __importDefault(require("./outstandingProject/outstandingProjectRoutes"));
+const deadlineRoutes_1 = __importDefault(require("./deadline/deadlineRoutes"));
 const routes = express_1.default.Router();
 routes.use((req, res, next) => {
     next();
@@ -12,5 +25,18 @@ routes.use((req, res, next) => {
 routes.get("/", (req, res) => {
     res.send("Welcome to GitBee");
 });
+routes.use("/auth", authRoutes_1.default);
+routes.use("/user", userRoutes_1.default);
 routes.use("/semester", semesterRoutes_1.default);
+routes.use("/class", classRoutes_1.default);
+routes.use("/reviewed-project", reviewedProjectRoutes_1.default);
+routes.use("/outstanding-project", outstandingProjectRoutes_1.default);
+routes.use("/project", projectRoutes_1.default);
+routes.use("/status", statusRoutes_1.default);
+routes.use("/category", categoryRoutes_1.default);
+routes.use("/technology", technologyRoutes_1.default);
+routes.use("/major", majorRoutes_1.default);
+routes.use("/group", groupRoutes_1.default);
+routes.use("/assessment", assessmentRoutes_1.default);
+routes.use("/deadline", deadlineRoutes_1.default);
 exports.default = routes;

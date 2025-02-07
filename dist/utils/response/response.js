@@ -11,7 +11,7 @@ const axios_1 = __importDefault(require("axios"));
 function sendSuccessResponse(res, data, cookie) {
     if (cookie) {
         res.cookie(cookie.name, cookie.value, {
-            httpOnly: true,
+            httpOnly: false,
             secure: false,
             expires: cookie.expires,
         });

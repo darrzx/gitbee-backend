@@ -116,7 +116,18 @@ export default class LecturerProjectHandler {
                     students: groupedData[name]
                 }));
 
-            sendSuccessResponse(res, {updatedProjects, sortedGroups, totalStudents});
+            let studentsInProjectGroups = 0;
+            updatedProjects.forEach(project => {
+                studentsInProjectGroups += project.projectGroups.length;
+            });
+    
+            let studentsInSortedGroups = 0;
+            sortedGroups.forEach(group => {
+                studentsInSortedGroups += group.students.length;
+            });
+            const countStudentSubmitted = studentsInProjectGroups + studentsInSortedGroups;
+
+            sendSuccessResponse(res, {updatedProjects, sortedGroups, totalStudents, countStudentSubmitted});
         } catch (error) {
             sendErrorResponse(res, error.message ? error.message : "Fetch Failed");
         }

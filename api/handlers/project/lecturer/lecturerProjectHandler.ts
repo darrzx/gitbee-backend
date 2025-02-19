@@ -81,6 +81,14 @@ export default class LecturerProjectHandler {
                 };
             }));
 
+            const totalStudents = await prisma.studentListTransaction.count({
+                where: {
+                    semester_id: params.semester_id,
+                    course_code: params.course_id,
+                    class: params.class
+                }
+            });
+
             const studentGroup = await prisma.temporaryGroup.findMany({
                 where: {
                     semester_id: params.semester_id,
@@ -108,7 +116,7 @@ export default class LecturerProjectHandler {
                     students: groupedData[name]
                 }));
 
-            sendSuccessResponse(res, {updatedProjects, sortedGroups});
+            sendSuccessResponse(res, {updatedProjects, sortedGroups, totalStudents});
         } catch (error) {
             sendErrorResponse(res, error.message ? error.message : "Fetch Failed");
         }

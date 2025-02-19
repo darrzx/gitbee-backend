@@ -62,8 +62,27 @@ export default class LecturerClassHandler {
                     ...(params.course_id ? { course_code: params.course_id } : {})
                 }
             });
+
+            const studentCounts = await Promise.all(classTransactions.map(async (classTransaction) => {
+                const count = await prisma.studentListTransaction.count({
+                    where: {
+                        semester_id: params.semester_id,
+                        class: classTransaction.class,
+                        course_code: classTransaction.course_code
+                    }
+                });
+                return { classId: classTransaction.id, total_students: count };
+            }));
     
-            sendSuccessResponse(res, classTransactions);
+            const formattedResponse = classTransactions.map(classTransaction => {
+                const studentData = studentCounts.find(sc => sc.classId === classTransaction.id);
+                return {
+                    ...classTransaction,
+                    total_students: studentData ? studentData.total_students : 0
+                };
+            });
+    
+            sendSuccessResponse(res, formattedResponse);
         } catch (error) {
             sendErrorResponse(res, error.message ? error.message : "Fetch Failed");
         }
